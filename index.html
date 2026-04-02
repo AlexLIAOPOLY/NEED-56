@@ -5,76 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI经营决策仿真平台</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260402-tickerloop3">
-<style>
-.role-wrap{
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:8px !important;
-  height:36px !important;
-  border:1px solid var(--border2) !important;
-  border-radius:12px !important;
-  padding:0 10px !important;
-  background:var(--bg3) !important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03) !important;
-}
-.role-wrap::before,
-.role-wrap::after{
-  content:none !important;
-  display:none !important;
-}
-.role-select{
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  -moz-appearance:none !important;
-  background-image:none !important;
-  border:none !important;
-  outline:none !important;
-  box-shadow:none !important;
-  background:transparent !important;
-  color:var(--t) !important;
-  font-size:12px !important;
-  font-weight:600 !important;
-  line-height:30px !important;
-  height:30px !important;
-  min-width:84px !important;
-  padding:0 !important;
-  cursor:pointer !important;
-}
-.role-select::-ms-expand{display:none !important;}
-.role-caret{
-  width:8px !important;
-  height:8px !important;
-  border-right:2px solid var(--t2) !important;
-  border-bottom:2px solid var(--t2) !important;
-  transform:rotate(45deg) translateY(-1px) !important;
-  flex:0 0 auto !important;
-}
-.role-sep{
-  width:1px !important;
-  height:18px !important;
-  background:var(--border2) !important;
-  opacity:.95 !important;
-  flex:0 0 auto !important;
-}
-.role-tag{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  min-width:40px !important;
-  height:28px !important;
-  font-size:10px !important;
-  line-height:1 !important;
-  font-weight:700 !important;
-  padding:0 10px !important;
-  border-radius:999px !important;
-  border:1px solid var(--border2) !important;
-  letter-spacing:.3px !important;
-}
-.role-tag.exec{color:#22c55e !important;border-color:rgba(34,197,94,.45) !important;background:rgba(34,197,94,.08) !important;}
-.role-tag.analyst{color:#60a5fa !important;border-color:rgba(96,165,250,.45) !important;background:rgba(96,165,250,.08) !important;}
-.role-tag.staff{color:#f59e0b !important;border-color:rgba(245,158,11,.45) !important;background:rgba(245,158,11,.08) !important;}
-</style>
+<link rel="stylesheet" href="style.css?v=20260402-rolemenu1">
 </head>
 <body>
 <aside class="sidebar">
@@ -110,15 +41,18 @@
     <span class="tb-sep">/</span>
     <span class="tb-sub" id="tb-sub">三维经营监测 · 内外部数据融合与日级感知</span>
     <div class="tb-r">
-      <div class="role-wrap" title="分级权限管理">
-        <select class="role-select" id="role-select" onchange="switchRole(this.value)">
-          <option value="exec">管理层</option>
-          <option value="analyst">规划分析</option>
-          <option value="staff">普通员工</option>
-        </select>
-        <span class="role-caret" aria-hidden="true"></span>
+      <div class="role-wrap" id="role-wrap" title="分级权限管理">
+        <button class="role-trigger" id="role-trigger" type="button" onclick="toggleRoleMenu(event)">
+          <span class="role-label" id="role-label">管理层</span>
+          <span class="role-caret" aria-hidden="true"></span>
+        </button>
         <span class="role-sep" aria-hidden="true"></span>
         <span class="role-tag exec" id="role-tag">L3</span>
+        <div class="role-menu" id="role-menu" style="display:none">
+          <button type="button" class="role-option act" data-role="exec" onclick="chooseRole('exec')">管理层</button>
+          <button type="button" class="role-option" data-role="analyst" onclick="chooseRole('analyst')">规划分析</button>
+          <button type="button" class="role-option" data-role="staff" onclick="chooseRole('staff')">普通员工</button>
+        </div>
       </div>
       <div class="notif-wrap" id="notif-wrap">
         <button class="notif-btn" onclick="toggleNotif()">通知<span class="notif-dot" id="notif-dot">4</span></button>
@@ -681,8 +615,11 @@ function applyRolePermissions() {
     roleTag.textContent = conf.tag;
     roleTag.className = 'role-tag ' + currentRole;
   }
-  const roleSelect = document.getElementById('role-select');
-  if(roleSelect && roleSelect.value !== currentRole) roleSelect.value = currentRole;
+  const roleLabel = document.getElementById('role-label');
+  if(roleLabel) roleLabel.textContent = conf.label;
+  document.querySelectorAll('.role-option').forEach(opt => {
+    opt.classList.toggle('act', opt.dataset.role === currentRole);
+  });
 
   document.querySelectorAll('#main-nav .ni').forEach(item => {
     const idx = +item.dataset.page;
@@ -702,6 +639,20 @@ function switchRole(role){
   currentRole = role;
   localStorage.setItem('ai-role', role);
   applyRolePermissions();
+  closeRoleMenu();
+}
+function toggleRoleMenu(e){
+  if(e) e.stopPropagation();
+  const menu = document.getElementById('role-menu');
+  if(!menu) return;
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+function closeRoleMenu(){
+  const menu = document.getElementById('role-menu');
+  if(menu) menu.style.display = 'none';
+}
+function chooseRole(role){
+  switchRole(role);
 }
 
 function goPage(el,idx){
@@ -1625,6 +1576,10 @@ document.addEventListener('click', e => {
   if(wrap && !wrap.contains(e.target)) {
     const p = document.getElementById('notif-panel');
     if(p) p.style.display = 'none';
+  }
+  const roleWrap = document.getElementById('role-wrap');
+  if(roleWrap && !roleWrap.contains(e.target)) {
+    closeRoleMenu();
   }
 });
 
