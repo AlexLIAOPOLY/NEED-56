@@ -126,7 +126,7 @@
           <div class="notif-header"><span>系统通知</span><span class="ca" onclick="clearNotifs()">全部已读</span></div>
           <div class="notif-item ni-d-item"><div class="ni-icon"></div><div><div class="ni-msg">风险1：日级刷新稳定性下降，需优先排查延迟链路</div><div class="ni-time">2分钟前 · 高优先级</div></div></div>
           <div class="notif-item ni-w-item"><div class="ni-icon"></div><div><div class="ni-msg">风险2：场景模型在外部口径变化场景准确率回落</div><div class="ni-time">18分钟前 · 模型预警</div></div></div>
-          <div class="notif-item ni-i-item"><div class="ni-icon"></div><div><div class="ni-msg">三大主业口径映射新增冲突字段，待跨部门确认</div><div class="ni-time">1小时前 · 数据治理</div></div></div>
+          <div class="notif-item ni-i-item"><div class="ni-icon"></div><div><div class="ni-msg">三大服务口径映射新增冲突字段，待跨部门确认</div><div class="ni-time">1小时前 · 数据治理</div></div></div>
           <div class="notif-item ni-s-item"><div class="ni-icon"></div><div><div class="ni-msg">MVP阶段里程碑达成 63%，进度符合Q2计划</div><div class="ni-time">3小时前 · 项目进展</div></div></div>
         </div>
       </div>
@@ -182,8 +182,8 @@
     </div>
   </div>
   <div class="g32">
-    <div class="card"><div class="ch"><span class="ct">三大主业收入趋势（亿 HKD）</span><span class="ca" onclick="exportCSV()">导出</span></div><div class="cw h200"><canvas id="c-rev-chart"></canvas></div></div>
-    <div class="card"><div class="ch"><span class="ct">三大主业收入占比</span></div><div class="cw h200"><canvas id="c-biz"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">三大服务收入趋势（亿 HKD）</span><span class="ca" onclick="exportCSV()">导出</span></div><div class="cw h200"><canvas id="c-rev-chart"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">三大服务收入占比</span></div><div class="cw h200"><canvas id="c-biz"></canvas></div></div>
   </div>
   <div class="g3">
     <div class="card"><div class="ch"><span class="ct">实时告警流</span><span class="ca" id="alert-count" style="color:var(--dn)">4 条未读</span></div><div class="alert-stream" id="alert-stream"></div></div>
@@ -202,13 +202,13 @@
 <!-- P1 财务分析 -->
 <div class="page" id="p1">
   <div class="g4">
-    <div class="kpi k-up"><div class="kl">三大主业收入</div><div class="kv">207.8<span class="ku">亿HKD</span></div><div class="kc up">占总收入 93.7%</div></div>
-    <div class="kpi k-up"><div class="kl">主业拆分完成率</div><div class="kv">68<span class="ku">%</span></div><div class="kc up">口径文件映射中</div></div>
+    <div class="kpi k-up"><div class="kl">三大服务收入</div><div class="kv">207.8<span class="ku">亿HKD</span></div><div class="kc up">占总收入 93.7%</div></div>
+    <div class="kpi k-up"><div class="kl">服务口径拆分完成率</div><div class="kv">68<span class="ku">%</span></div><div class="kc up">口径文件映射中</div></div>
     <div class="kpi k-warn"><div class="kl">口径一致率</div><div class="kv">86<span class="ku">%</span></div><div class="kc dn2">仍有跨系统差异</div></div>
     <div class="kpi k-up"><div class="kl">可追溯明细覆盖</div><div class="kv">72<span class="ku">%</span></div><div class="kc up">已落库到日级</div></div>
   </div>
   <div class="g21">
-    <div class="card"><div class="ch"><span class="ct">三大主业季度收入拆解（亿HKD）</span><span class="ca" onclick="exportCSV()">导出 CSV</span></div><div class="cw h240"><canvas id="c-fin1"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">三大服务季度收入拆解（亿HKD）</span><span class="ca" onclick="exportCSV()">导出 CSV</span></div><div class="cw h240"><canvas id="c-fin1"></canvas></div></div>
     <div class="card"><div class="ch"><span class="ct">成本结构分布</span></div><div class="cw h240"><canvas id="c-cost"></canvas></div></div>
   </div>
   <div class="g3">
@@ -222,16 +222,16 @@
       <div class="msr"><span class="msr-l">Capex/Rev</span><span class="msr-r">12.8%</span></div>
     </div>
   </div>
-  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">三大主业财务拆分明细（试算口径）</span><span class="ca" onclick="exportCSV()">导出</span></div>
-    <table class="tbl"><thead><tr><th>主业条线</th><th>营收（亿）</th><th>同比</th><th>毛利率</th><th>净利润（亿）</th><th>收入占比</th><th>口径状态</th></tr></thead>
+  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">三大服务财务拆分明细（试算口径）</span><span class="ca" onclick="exportCSV()">导出</span></div>
+    <table class="tbl"><thead><tr><th>服务条线</th><th>营收（亿）</th><th>同比</th><th>毛利率</th><th>净利润（亿）</th><th>收入占比</th><th>口径状态</th></tr></thead>
     <tbody>
-      <tr><td class="hi">个人移动</td><td>150.6</td><td><span class="tag tg">+4.2%</span></td><td>48.3%</td><td>28.6</td><td>67.9%</td><td><span class="tag tg">已对齐</span></td></tr>
-      <tr><td class="hi">家庭宽带</td><td>32.4</td><td><span class="tag tg">+2.1%</span></td><td>41.7%</td><td>6.8</td><td>14.6%</td><td><span class="tag tg">已对齐</span></td></tr>
-      <tr><td class="hi">政企服务</td><td>24.8</td><td><span class="tag tg">+8.6%</span></td><td>55.2%</td><td>7.2</td><td>11.2%</td><td><span class="tag tb2">待复核</span></td></tr>
+      <tr><td class="hi">通信服务</td><td>128.4</td><td><span class="tag tg">+3.9%</span></td><td>47.5%</td><td>24.1</td><td>61.8%</td><td><span class="tag tg">已对齐</span></td></tr>
+      <tr><td class="hi">算力服务</td><td>46.2</td><td><span class="tag tg">+12.4%</span></td><td>43.8%</td><td>9.2</td><td>22.2%</td><td><span class="tag tg">已对齐</span></td></tr>
+      <tr><td class="hi">智能服务</td><td>33.2</td><td><span class="tag tg">+28.7%</span></td><td>58.6%</td><td>9.0</td><td>16.0%</td><td><span class="tag tb2">待复核</span></td></tr>
       <tr><td class="hi">国际及漫游</td><td>8.6</td><td><span class="tag tr2">-3.4%</span></td><td>38.1%</td><td>1.2</td><td>3.9%</td><td><span class="tag ta">补充口径</span></td></tr>
-      <tr><td class="hi">数字服务</td><td>5.4</td><td><span class="tag tg">+22.3%</span></td><td>62.8%</td><td>1.8</td><td>2.4%</td><td><span class="tag tp">研究映射</span></td></tr>
+      <tr><td class="hi">生态增值</td><td>5.4</td><td><span class="tag tg">+22.3%</span></td><td>62.8%</td><td>1.8</td><td>2.4%</td><td><span class="tag tp">研究映射</span></td></tr>
     </tbody></table>
-    <div class="alt alt-i" style="margin-top:10px">拆分口径以《三大主业口径说明》为准；未披露或跨口径字段暂按战略部/业务研究结果进行映射。</div>
+    <div class="alt alt-i" style="margin-top:10px">拆分口径以《三大服务口径说明》为准；未披露或跨口径字段暂按战略部/业务研究结果进行映射。</div>
   </div>
 </div>
 
@@ -364,7 +364,7 @@
       <div class="alt alt-d">风险1：内部跨系统数据存在延迟与缺失，日级监测稳定性不足</div>
       <div class="alt alt-d">风险2：模型准确率在部分场景未达85%，影响策略可信度</div>
       <div class="alt alt-w">运营商披露口径不一致，外部横向对比偏差扩大</div>
-      <div class="alt alt-w">三大主业拆分仍有口径冲突，财务归因效率受限</div>
+      <div class="alt alt-w">三大服务拆分仍有口径冲突，财务归因效率受限</div>
       <div class="alt alt-i">可通过战略部与业务研究补齐财报缺失字段</div>
       <div class="alt alt-s">MVP阶段先聚焦高价值指标，逐季迭代可降低落地风险</div>
     </div>
@@ -400,13 +400,32 @@
 <div class="page" id="p5">
   <div class="g2">
     <div class="card">
-      <div class="ch"><span class="ct">参数设置（数字孪生沙盘）</span><span class="ca" onclick="resetScenario()">重置默认</span></div>
-      <div class="sc"><div class="sc-lbl"><span>套餐策略强度（价格指数）</span><span id="v-price">198</span></div><input type="range" min="120" max="280" value="198" id="s-price" oninput="updateScenario()"></div>
-      <div class="sc"><div class="sc-lbl"><span>市场投放投入（百万HKD）</span><span id="v-mkt">85</span></div><input type="range" min="20" max="200" value="85" id="s-mkt" oninput="updateScenario()"></div>
-      <div class="sc"><div class="sc-lbl"><span>数据治理投入（亿HKD）</span><span id="v-capex">28</span></div><input type="range" min="10" max="50" value="28" id="s-capex" oninput="updateScenario()"></div>
-      <div class="sc"><div class="sc-lbl"><span>政企拓展目标（家）</span><span id="v-b2b">1200</span></div><input type="range" min="500" max="3000" value="1200" id="s-b2b" oninput="updateScenario()"></div>
-      <div class="sc"><div class="sc-lbl"><span>5G用户增长目标（%）</span><span id="v-5g">75</span></div><input type="range" min="60" max="95" value="75" id="s-5g" oninput="updateScenario()"></div>
-      <div class="sc"><div class="sc-lbl"><span>政策/竞对冲击应对力度（%）</span><span id="v-churn">50</span></div><input type="range" min="0" max="100" value="50" id="s-churn" oninput="updateScenario()"></div>
+      <div class="ch"><span class="ct">参数设置（双场景沙盘）</span><span class="ca" onclick="resetScenario()">重置默认</span></div>
+      <div style="margin:4px 0 8px;font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase">模拟类型</div>
+      <div class="algo-tabs" id="scenario-mode-tabs">
+        <button class="algo-btn act" data-s-mode="comm" onclick="setScenarioMode(this,'comm')">通信服务市场模拟</button>
+        <button class="algo-btn" data-s-mode="ai" onclick="setScenarioMode(this,'ai')">算力与智能投入产出模拟</button>
+      </div>
+      <div class="algo-desc" id="scenario-mode-desc">聚焦套餐、5G用户与竞对应对，模拟通信服务市场表现。</div>
+
+      <div class="scenario-block act" data-mode="comm">
+        <div class="sc"><div class="sc-lbl"><span>套餐价格指数</span><span id="v-comm-price">198</span></div><input type="range" min="120" max="280" value="198" id="s-comm-price" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>市场投放投入（百万HKD）</span><span id="v-comm-mkt">82</span></div><input type="range" min="20" max="220" value="82" id="s-comm-mkt" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>5G新增用户目标（万）</span><span id="v-comm-5g">75</span></div><input type="range" min="30" max="160" value="75" id="s-comm-5g" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>融合套餐渗透率（%）</span><span id="v-comm-bundle">48</span></div><input type="range" min="20" max="80" value="48" id="s-comm-bundle" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>网络体验投入（亿HKD）</span><span id="v-comm-net">16</span></div><input type="range" min="6" max="35" value="16" id="s-comm-net" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>竞对应对力度（%）</span><span id="v-comm-response">55</span></div><input type="range" min="0" max="100" value="55" id="s-comm-response" oninput="updateScenario()"></div>
+      </div>
+
+      <div class="scenario-block" data-mode="ai">
+        <div class="sc"><div class="sc-lbl"><span>算力中心投入（亿HKD）</span><span id="v-ai-idc">24</span></div><input type="range" min="8" max="50" value="24" id="s-ai-idc" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>机房上架率目标（%）</span><span id="v-ai-rack">72</span></div><input type="range" min="40" max="95" value="72" id="s-ai-rack" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>数据治理投入（亿HKD）</span><span id="v-ai-govern">22</span></div><input type="range" min="6" max="45" value="22" id="s-ai-govern" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>模型生产化数量（个）</span><span id="v-ai-models">36</span></div><input type="range" min="8" max="80" value="36" id="s-ai-models" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>智能应用渗透率（%）</span><span id="v-ai-adopt">46</span></div><input type="range" min="10" max="90" value="46" id="s-ai-adopt" oninput="updateScenario()"></div>
+        <div class="sc"><div class="sc-lbl"><span>单位算力成本优化（%）</span><span id="v-ai-cost">18</span></div><input type="range" min="0" max="40" value="18" id="s-ai-cost" oninput="updateScenario()"></div>
+      </div>
+
       <div style="margin:14px 0 8px;font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase">预测算法</div>
       <div class="algo-tabs" id="algo-tabs">
         <button class="algo-btn act" onclick="setAlgo(this,'mc')">蒙特卡洛</button>
@@ -421,36 +440,36 @@
       <div class="sc-res">
         <div class="sc-res-title">12个月预测结果</div>
         <div class="sc-kpis">
-          <div class="sc-kpi"><div class="sc-kv pos" id="sc-rev">+4.8%</div><div class="sc-kl">营收增长</div></div>
-          <div class="sc-kpi"><div class="sc-kv pos" id="sc-usr">+8.2万</div><div class="sc-kl">净增用户</div></div>
-          <div class="sc-kpi"><div class="sc-kv" id="sc-arpu">204</div><div class="sc-kl">预测ARPU</div></div>
-          <div class="sc-kpi"><div class="sc-kv pos" id="sc-profit">+2.1pts</div><div class="sc-kl">利润率变化</div></div>
-          <div class="sc-kpi"><div class="sc-kv" id="sc-churn">1.62%</div><div class="sc-kl">风险暴露率</div></div>
-          <div class="sc-kpi"><div class="sc-kv pos" id="sc-nps">+6pts</div><div class="sc-kl">效益得分提升</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-rev">+4.8%</div><div class="sc-kl" id="sc-lab-rev">通信服务收入增长</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-usr">+8.2万</div><div class="sc-kl" id="sc-lab-usr">净增5G用户</div></div>
+          <div class="sc-kpi"><div class="sc-kv" id="sc-arpu">204</div><div class="sc-kl" id="sc-lab-arpu">预测ARPU</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-profit">+2.1pts</div><div class="sc-kl" id="sc-lab-profit">利润率变化</div></div>
+          <div class="sc-kpi"><div class="sc-kv" id="sc-churn">1.62%</div><div class="sc-kl" id="sc-lab-churn">流失风险率</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-nps">+6pts</div><div class="sc-kl" id="sc-lab-nps">NPS提升</div></div>
         </div>
-        <div class="ci-row" id="ci-row"><span class="ci-label">82%置信区间</span><span class="ci-val" id="ci-val">+3.1% ~ +7.4%</span></div>
+        <div class="ci-row" id="ci-row"><span class="ci-label" id="ci-label">82%置信区间</span><span class="ci-val" id="ci-val">+3.1% ~ +7.4%</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">场景雷达：基线 vs 模拟</span></div>
+      <div class="ch"><span class="ct" id="scenario-radar-title">通信服务场景雷达：基线 vs 模拟</span></div>
       <div class="cw h220"><canvas id="c-scenario"></canvas></div>
-      <div style="margin-top:12px"><div class="ch"><span class="ct">算法对比：12月营收预测（亿HKD）</span><span class="ca" id="algo-rmse">RMSE: —</span></div>
+      <div style="margin-top:12px"><div class="ch"><span class="ct" id="scenario-algo-title">算法对比：12月通信服务收入预测（亿HKD）</span><span class="ca" id="algo-rmse">RMSE: —</span></div>
         <div class="cw h180"><canvas id="c-algo-compare"></canvas></div>
       </div>
     </div>
   </div>
   <div class="g3">
     <div class="card">
-      <div class="ch"><span class="ct">收入预测走势（含置信带）</span></div>
+      <div class="ch"><span class="ct" id="scenario-forecast-title">通信服务收入预测走势（含置信带）</span></div>
       <div class="cw h200"><canvas id="c-forecast"></canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">ROI敏感性分析</span></div>
+      <div class="ch"><span class="ct" id="scenario-roi-title">通信策略ROI敏感性分析</span></div>
       <div class="cw h200"><canvas id="c-roi"></canvas></div>
     </div>
     <div class="card">
       <div class="ch"><span class="ct">决策建议</span></div>
-      <div class="alt alt-s">先固化《三大主业口径说明》并形成系统映射，保证拆分一致性</div>
+      <div class="alt alt-s">先固化《三大服务口径说明》并形成系统映射，保证拆分一致性</div>
       <div class="alt alt-i">优先保障“经营效益、发展效率、运营效能”三维核心指标日级可用</div>
       <div class="alt alt-w">财报缺口字段采用“披露+研究”双轨补齐，提升竞对横向可比性</div>
       <div class="alt alt-s">按敏捷节奏季度发布核心模块，MVP在6个月内完成内测</div>
@@ -500,7 +519,7 @@
     <div class="ai-item ai-good"><span class="ai-label">优势</span><span>内部ERP/CRM/B域/O域数据基础较好，三维指标框架已明确，可直接进入MVP开发。</span></div>
     <div class="ai-item ai-warn"><span class="ai-label">风险</span><span>数据质量与模型准确率是两大核心风险，若不前置治理将直接影响仿真可信度。</span></div>
     <div class="ai-item ai-info"><span class="ai-label">机遇</span><span>采用季度迭代可在一年内完成“数据融合+预测+沙盘”闭环，并逐步扩展外部可比维度。</span></div>
-    <div class="ai-item ai-action"><span class="ai-label">行动</span><span>优先完成三大主业口径落表、日级监测链路和模型回测体系，确保6个月MVP如期上线。</span></div>
+    <div class="ai-item ai-action"><span class="ai-label">行动</span><span>优先完成三大服务口径落表、日级监测链路和模型回测体系，确保6个月MVP如期上线。</span></div>
   </div>
 </div>
 
@@ -521,7 +540,7 @@
         <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">B域经营指标库</div><div class="ds-meta">日级 · 政企合同/项目进度</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-bss"></div></div></div>
         <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">O域网络指标库</div><div class="ds-meta">实时 · 时延/可用率/故障告警</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-oss"></div></div></div>
         <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">DPI 行为分析</div><div class="ds-meta">实时 · 流量使用变化/用户轨迹</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-dpi"></div></div></div>
-        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">口径说明映射库</div><div class="ds-meta">日级 · 三大主业拆分规则</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">口径说明映射库</div><div class="ds-meta">日级 · 三大服务拆分规则</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
         <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">工单系统</div><div class="ds-meta">实时 · 故障/投诉/处置时效</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
         <div class="ds-item"><div class="ds-dot ds-warn"></div><div class="ds-info"><div class="ds-name">渠道POS系统</div><div class="ds-meta">30min · 门店销售/库存</div></div><div class="ds-stat"><span class="tag ta">延迟</span></div></div>
         <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">HR 人力系统</div><div class="ds-meta">每日 · 人员配置/效率</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
@@ -590,7 +609,7 @@
 
 <script>
 const PAGE_TITLES=['决策总览','财务分析','运营监控','市场洞察','风险研判','场景模拟','行业趋势','数据接入'];
-const PAGE_SUBS=['三维经营监测 · 内外部数据融合与日级感知','三大主业收入拆分 · 口径管理 · 财务预测','经营效益/发展效率/运营效能实时监控','竞对披露 · 政策动态 · 外部研究整合','风险雷达 · 概率评估 · 风险闭环治理','数字孪生沙盘 · 多变量推演 · AI Agent模拟','一年落地路线图 · 交付成果 · 场景价值','ERP/CRM/B域/O域接入 · 外部抓取 · 日级刷新'];
+const PAGE_SUBS=['三维经营监测 · 内外部数据融合与日级感知','三大服务收入拆分 · 口径管理 · 财务预测','经营效益/发展效率/运营效能实时监控','竞对披露 · 政策动态 · 外部研究整合','风险雷达 · 概率评估 · 风险闭环治理','双场景沙盘 · 通信市场 + 算智投入产出 · AI Agent模拟','一年落地路线图 · 交付成果 · 场景价值','ERP/CRM/B域/O域接入 · 外部抓取 · 日级刷新'];
 const ROLE_CONFIG = {
   exec:    {label:'管理层',   tag:'L3', pages:[0,1,2,3,4,5,6,7], mask:false},
   analyst: {label:'规划分析', tag:'L2', pages:[0,1,2,3,4,5,6,7], mask:false},
@@ -658,7 +677,7 @@ setInterval(tick,1000);tick();
 function syncData(){const btn=document.getElementById('sync-btn');btn.textContent='同步中...';btn.classList.add('loading');setTimeout(()=>{btn.textContent='同步数据';btn.classList.remove('loading');tick();},1400);}
 let currentRange='3M';
 function setRange(el,range){document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('act'));el.classList.add('act');currentRange=range;refreshRevChart();}
-function exportCSV(){const rows=[['主业条线','营收(亿HKD)','同比变化','毛利率','净利润(亿)','收入占比','口径状态'],['个人移动','150.6','+4.2%','48.3%','28.6','67.9%','已对齐'],['家庭宽带','32.4','+2.1%','41.7%','6.8','14.6%','已对齐'],['政企服务','24.8','+8.6%','55.2%','7.2','11.2%','待复核'],['国际及漫游','8.6','-3.4%','38.1%','1.2','3.9%','补充口径'],['数字服务','5.4','+22.3%','62.8%','1.8','2.4%','研究映射']];const csv=rows.map(r=>r.join(',')).join('\n');const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='AI经营决策平台_主业拆分_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+function exportCSV(){const rows=[['服务条线','营收(亿HKD)','同比变化','毛利率','净利润(亿)','收入占比','口径状态'],['通信服务','128.4','+3.9%','47.5%','24.1','61.8%','已对齐'],['算力服务','46.2','+12.4%','43.8%','9.2','22.2%','已对齐'],['智能服务','33.2','+28.7%','58.6%','9.0','16.0%','待复核'],['国际及漫游','8.6','-3.4%','38.1%','1.2','3.9%','补充口径'],['生态增值','5.4','+22.3%','62.8%','1.8','2.4%','研究映射']];const csv=rows.map(r=>r.join(',')).join('\n');const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='AI经营决策平台_三大服务拆分_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
 Chart.defaults.color='#4e6a8a';Chart.defaults.borderColor='#1a2436';
 Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif";
 Chart.defaults.font.size=10.5;
@@ -672,10 +691,10 @@ charts['c-rev-chart']=C('c-rev-chart',{type:'line',data:{labels:RDATA['3M'].labe
 
 function refreshRevChart(){const d=RDATA[currentRange];const ch=charts['c-rev-chart'];ch.data.labels=d.labels;ch.data.datasets[0].data=d.rev;ch.data.datasets[1].data=d.tgt;ch.update();}
 
-C('c-biz',{type:'doughnut',data:{labels:['个人移动','家庭宽带','政企服务'],datasets:[{data:[72,16,12],backgroundColor:['#3b82f6','#22d3ee','#22c55e'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
+C('c-biz',{type:'doughnut',data:{labels:['通信服务','算力服务','智能服务'],datasets:[{data:[62,22,16],backgroundColor:['#3b82f6','#22d3ee','#22c55e'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
 C('c-usr',{type:'bar',data:{labels:['经营效益','发展效率','运营效能'],datasets:[{data:[76,69,73],backgroundColor:['#3b82f6','#22c55e','#22d3ee'],borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'分'}}}}});
 
-C('c-fin1',{type:'bar',data:{labels:['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],datasets:[{label:'个人移动',data:[37.2,38.6,37.9,39.1,38.8],backgroundColor:'#3b82f6',borderRadius:3,stack:'s'},{label:'家庭宽带',data:[8.0,8.1,8.2,8.2,8.3],backgroundColor:'#22d3ee',borderRadius:3,stack:'s'},{label:'政企服务',data:[5.8,6.0,6.2,6.5,6.8],backgroundColor:'#22c55e',borderRadius:3,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},stacked:true,ticks:{callback:v=>v+'亿'}}}}});
+C('c-fin1',{type:'bar',data:{labels:['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],datasets:[{label:'通信服务',data:[31.6,32.4,32.8,33.7,34.1],backgroundColor:'#3b82f6',borderRadius:3,stack:'s'},{label:'算力服务',data:[9.8,10.2,10.8,11.9,12.5],backgroundColor:'#22d3ee',borderRadius:3,stack:'s'},{label:'智能服务',data:[6.2,6.8,7.1,7.8,8.3],backgroundColor:'#22c55e',borderRadius:3,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},stacked:true,ticks:{callback:v=>v+'亿'}}}}});
 C('c-cost',{type:'doughnut',data:{labels:['网络运营','人力成本','销售推广','折旧摘销','行政管理','其他'],datasets:[{data:[32,24,16,14,9,5],backgroundColor:['#3b82f6','#22c55e','#f59e0b','#818cf8','#22d3ee','#3d5470'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
 C('c-profit',{type:'line',data:{labels:['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'],datasets:[{label:'净利润',data:[380,392,405,418,400,425,438,442,428,445,452,460],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:1.5},{label:'EBITDA',data:[580,592,608,622,610,630,645,652,638,660,668,675],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:2,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'M'}}}}});
 C('c-net',{type:'line',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'网络可用率(%)',data:[99.93,99.94,99.95,99.96,99.95,99.96],borderColor:'#22c55e',fill:false,tension:.3,pointRadius:3,borderWidth:1.5},{label:'5G速率(x10Mbps)',data:[32.1,33.4,34.2,36.8,38.2,38.7],borderColor:'#3b82f6',fill:false,tension:.3,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor}}}}});
@@ -689,9 +708,54 @@ const riskPts={5:{5:'数据质量不足/延迟',4:'模型准确率偏低'},3:{5:
 for(let r=5;r>=1;r--){for(let c=1;c<=5;c++){const s=r*c;let bg;if(s>=16)bg='rgba(244,63,94,.32)';else if(s>=9)bg='rgba(245,158,11,.25)';else if(s>=4)bg='rgba(34,197,94,.2)';else bg='rgba(34,197,94,.1)';const el=document.createElement('div');el.className='rc';el.style.background=bg;if(riskPts[r]&&riskPts[r][c]){el.innerHTML=`<div style="width:7px;height:7px;border-radius:50%;background:#fff;opacity:.85"></div><div class="rc-tip">${riskPts[r][c]}</div>`;}rmEl.appendChild(el);}}
 C('c-risk',{type:'line',data:{labels:['3-1','3-5','3-10','3-15','3-20','3-25','3-30'],datasets:[{label:'综合风险指数',data:[6.2,6.5,6.8,7.1,7.0,7.3,7.4],borderColor:'#f43f5e',backgroundColor:'rgba(244,63,94,.06)',fill:true,tension:.4,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:5,max:10,grid:{color:gridColor}}}}});
 // Scenario charts
-let scChart=C('c-scenario',{type:'radar',data:{labels:['营收增长','用户增长','利润率','网络质量','客户满意','市场份额'],datasets:[{label:'基线',data:[55,60,70,80,75,65],borderColor:'#3d5470',backgroundColor:'rgba(61,84,112,.08)',pointRadius:3,borderWidth:1.5},{label:'模拟',data:[65,72,74,82,80,68],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.1)',pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{r:{grid:{color:'rgba(26,36,54,.9)'},pointLabels:{font:{size:10},color:'#7e96b4'},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
+const SCENARIO_META = {
+  comm: {
+    desc: '聚焦套餐、5G用户与竞对应对，模拟通信服务市场表现。',
+    kpiLabels: {
+      rev: '通信服务收入增长',
+      usr: '净增5G用户',
+      arpu: '预测ARPU',
+      profit: '利润率变化',
+      churn: '流失风险率',
+      nps: 'NPS提升'
+    },
+    ciLabel: '82%置信区间',
+    radarTitle: '通信服务场景雷达：基线 vs 模拟',
+    algoTitle: '算法对比：12月通信服务收入预测（亿HKD）',
+    forecastTitle: '通信服务收入预测走势（含置信带）',
+    roiTitle: '通信策略ROI敏感性分析',
+    radarLabels: ['收入增长', '用户增长', '利润率', '网络质量', '客户满意', '市场份额'],
+    radarBaseline: [58, 62, 70, 78, 74, 66],
+    roiLabels: ['套餐价格优化', '渠道投放', '5G网络提速', '融合套餐', '存量保有', '成本优化'],
+    roiBaseline: [1.2, 1.5, 1.7, 1.8, 1.4, 1.6],
+    forecastSeriesName: '通信服务收入'
+  },
+  ai: {
+    desc: '聚焦机房、数据治理和智能渗透，模拟算力与智能服务投入产出。',
+    kpiLabels: {
+      rev: '算智收入增长',
+      usr: '年化新增合同额',
+      arpu: '预测投入产出比',
+      profit: '单位算力成本优化',
+      churn: '交付风险率',
+      nps: '治理成熟度提升'
+    },
+    ciLabel: '85%置信区间',
+    radarTitle: '算力与智能场景雷达：基线 vs 模拟',
+    algoTitle: '算法对比：12月算智服务收入预测（亿HKD）',
+    forecastTitle: '算智服务收入预测走势（含置信带）',
+    roiTitle: '算智投入ROI敏感性分析',
+    radarLabels: ['算力供给', '数据治理', '模型生产化', '智能渗透', '投入产出', '交付稳定'],
+    radarBaseline: [52, 50, 46, 43, 48, 58],
+    roiLabels: ['机房扩容', '算力调度', '数据治理', '模型工程化', '智能产品化', '成本优化'],
+    roiBaseline: [1.6, 1.5, 1.8, 1.7, 1.9, 1.4],
+    forecastSeriesName: '算智服务收入'
+  }
+};
+let currentScenarioMode = 'comm';
+let scChart=C('c-scenario',{type:'radar',data:{labels:SCENARIO_META.comm.radarLabels,datasets:[{label:'基线',data:SCENARIO_META.comm.radarBaseline,borderColor:'#3d5470',backgroundColor:'rgba(61,84,112,.08)',pointRadius:3,borderWidth:1.5},{label:'模拟',data:[65,72,74,82,80,68],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.1)',pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{r:{grid:{color:'rgba(26,36,54,.9)'},pointLabels:{font:{size:10},color:'#7e96b4'},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
 
-C('c-roi',{type:'bar',data:{labels:['降价策略','增加推广','5G提速','B2B拓展','数字服务','成本优化'],datasets:[{data:[0.8,1.4,1.8,2.6,3.2,1.9],backgroundColor:['#f43f5e','#f59e0b','#22d3ee','#22c55e','#818cf8','#3b82f6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'x'}}}}});
+C('c-roi',{type:'bar',data:{labels:SCENARIO_META.comm.roiLabels,datasets:[{data:SCENARIO_META.comm.roiBaseline,backgroundColor:['#f43f5e','#f59e0b','#22d3ee','#22c55e','#818cf8','#3b82f6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'x'}}}}});
 C('c-global',{type:'line',data:{labels:['Q1','Q2','Q3','Q4'],datasets:[{label:'数据整合引擎',data:[40,62,81,95],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:3,borderWidth:2},{label:'AI预测模型',data:[25,48,72,88],borderColor:'#22c55e',fill:false,tension:.4,pointRadius:3,borderWidth:1.5},{label:'场景模拟能力',data:[18,36,60,82],borderColor:'#3d5470',fill:false,tension:.4,pointRadius:3,borderWidth:1.5,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
 C('c-5gfore',{type:'line',data:{labels:['M1','M3','M6','M9','M12'],datasets:[{label:'平台成熟度',data:[22,44,63,78,90],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.4,pointRadius:3,borderWidth:1.5},{label:'目标轨迹',data:[20,40,60,75,88],borderColor:'#22c55e',fill:false,tension:.4,pointRadius:3,borderWidth:1.5,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
 C('c-digital',{type:'bar',data:{labels:['Q1','Q2','Q3','Q4'],datasets:[{label:'取数自动化节省',data:[18,32,46,58],backgroundColor:'rgba(129,140,248,.7)',borderRadius:4},{label:'报告生产节省',data:[12,26,41,55],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'分析协同节省',data:[8,20,33,47],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
@@ -706,7 +770,10 @@ const ALGO_DESC = {
   bayes: '贝叶斯推断：引入先验知识，输出后验分布与不确定性量化'
 };
 
-const HIST_REV = [16.2,16.8,17.1,17.4,17.0,17.8,18.0,18.2,17.9,18.3,18.5,18.6];
+const HIST_SERIES = {
+  comm: [16.2,16.8,17.1,17.4,17.0,17.8,18.0,18.2,17.9,18.3,18.5,18.6],
+  ai:   [2.1,2.3,2.5,2.9,3.2,3.6,4.1,4.5,5.0,5.6,6.1,6.8]
+};
 
 function linReg(data) {
   const n=data.length; let sx=0,sy=0,sxy=0,sx2=0;
@@ -758,7 +825,6 @@ function monteCarlo(data, boost=0) {
   const std=Math.sqrt(data.reduce((s,v)=>s+(v-mean)**2,0)/n)||0.2;
   const trend=(data[n-1]-data[0])/(n-1);
   const N=10000; const finals=[];
-  // build forecast paths for p10/p90
   const paths=Array.from({length:12},()=>[]);
   for(let i=0;i<N;i++){
     let v=data[n-1];
@@ -771,59 +837,200 @@ function monteCarlo(data, boost=0) {
     finals.push(paths[11][paths[11].length-1]);
   }
   finals.sort((a,b)=>a-b);
-  const p10v=finals[Math.floor(N*0.1)], p90v=finals[Math.floor(N*0.9)], medv=finals[Math.floor(N*0.5)];
+  const p10v=finals[Math.floor(N*0.1)], p90v=finals[Math.floor(N*0.9)];
   const forecast=[]; const p10arr=[]; const p90arr=[];
   paths.forEach(arr=>{
     arr.sort((a,b)=>a-b);
     p10arr.push(+arr[Math.floor(N*0.1)].toFixed(2));
-    p90arr.push(+arr[Math.floor(N*0.5)].toFixed(2));
-    p90arr[p90arr.length-1]=+arr[Math.floor(N*0.9)].toFixed(2);
     forecast.push(+arr[Math.floor(N*0.5)].toFixed(2));
+    p90arr.push(+arr[Math.floor(N*0.9)].toFixed(2));
   });
   const rmse=std*1.2;
-  return {forecast, rmse:+rmse.toFixed(3), ci:+(p90v-p10v).toFixed(2), p10:p10arr, p90:p90arr.map((v,i)=>paths[i].sort((a,b)=>a-b)[Math.floor(N*0.9)]), name:'蒙特卡洛', p10v, p50v:medv, p90v};
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(p90v-p10v).toFixed(2), p10:p10arr, p90:p90arr, name:'蒙特卡洛', p10v, p90v};
 }
 
-function runAllAlgos(boost=0) {
+function runAllAlgos(data, boost=0) {
   return {
-    lr: linReg(HIST_REV),
-    es: expSmooth(HIST_REV),
-    arima: arimaModel(HIST_REV),
-    bayes: bayesian(HIST_REV),
-    mc: monteCarlo(HIST_REV, boost)
+    lr: linReg(data),
+    es: expSmooth(data),
+    arima: arimaModel(data),
+    bayes: bayesian(data),
+    mc: monteCarlo(data, boost)
   };
 }
 
 function setAlgo(el, algo) {
   currentAlgo = algo;
-  document.querySelectorAll('.algo-btn').forEach(b=>b.classList.remove('act'));
+  document.querySelectorAll('#algo-tabs .algo-btn').forEach(b=>b.classList.remove('act'));
   el.classList.add('act');
   document.getElementById('algo-desc').textContent = ALGO_DESC[algo];
   updateScenario();
 }
 
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function setText(id,text){const el=document.getElementById(id);if(el) el.textContent=text;}
+function getVal(id){const el=document.getElementById(id);return el?+el.value:0;}
+function signed(val,dec,sfx=''){return `${val>=0?'+':''}${val.toFixed(dec)}${sfx}`;}
+function setMetric(id,text,cls=''){const el=document.getElementById(id);if(!el) return;el.textContent=text;el.className='sc-kv'+(cls?` ${cls}`:'');}
+
+function updateModeText(mode){
+  const conf=SCENARIO_META[mode];
+  if(!conf) return;
+  setText('scenario-mode-desc',conf.desc);
+  setText('scenario-radar-title',conf.radarTitle);
+  setText('scenario-algo-title',conf.algoTitle);
+  setText('scenario-forecast-title',conf.forecastTitle);
+  setText('scenario-roi-title',conf.roiTitle);
+  setText('sc-lab-rev',conf.kpiLabels.rev);
+  setText('sc-lab-usr',conf.kpiLabels.usr);
+  setText('sc-lab-arpu',conf.kpiLabels.arpu);
+  setText('sc-lab-profit',conf.kpiLabels.profit);
+  setText('sc-lab-churn',conf.kpiLabels.churn);
+  setText('sc-lab-nps',conf.kpiLabels.nps);
+  setText('ci-label',conf.ciLabel);
+}
+
+function setScenarioMode(el, mode){
+  if(!SCENARIO_META[mode]) return;
+  currentScenarioMode = mode;
+  document.querySelectorAll('#scenario-mode-tabs .algo-btn').forEach(b=>b.classList.remove('act'));
+  if(el) el.classList.add('act');
+  document.querySelectorAll('.scenario-block').forEach(block=>{
+    block.classList.toggle('act', block.dataset.mode===mode);
+  });
+  updateModeText(mode);
+  resetScenario();
+}
+
+function updateROIChart(labels, values){
+  const ch = charts['c-roi'];
+  if(!ch) return;
+  ch.data.labels = labels;
+  ch.data.datasets[0].data = values.map(v=>+v.toFixed(2));
+  ch.update();
+}
+
+function commScenario(){
+  const price=getVal('s-comm-price');
+  const mkt=getVal('s-comm-mkt');
+  const g5=getVal('s-comm-5g');
+  const bundle=getVal('s-comm-bundle');
+  const net=getVal('s-comm-net');
+  const response=getVal('s-comm-response');
+  setText('v-comm-price',price);
+  setText('v-comm-mkt',mkt);
+  setText('v-comm-5g',g5);
+  setText('v-comm-bundle',bundle);
+  setText('v-comm-net',net);
+  setText('v-comm-response',response);
+
+  const pe=(price-198)/198;
+  const me=(mkt-82)/82;
+  const ue=(g5-75)/75;
+  const be=(bundle-48)/48;
+  const ne=(net-16)/16;
+  const re=(response-55)/55;
+
+  const revG=+(4.1-pe*7+me*3.8+ue*2.2+be*1.4+ne*1.2+re*0.9).toFixed(2);
+  const usrG=+(7.4+me*2.4+ue*4.8+be*2.6-pe*6.2+re*1.8).toFixed(1);
+  const arpu=Math.round(198+pe*26+be*8+ne*4);
+  const profit=+(1.6-pe*3.2+ne*2.8+be*1.4-me*1.2+re*0.8).toFixed(1);
+  const risk=+Math.max(0.7,1.95-re*0.5-ne*0.3-be*0.2+pe*0.15).toFixed(2);
+  const nps=Math.max(0,Math.round(5+be*6+ne*5+re*4+ue*2));
+
+  return {
+    boost: revG/100*0.08 + ue*0.02,
+    metrics: {
+      rev:{text:signed(revG,1,'%'),cls:revG>=0?'pos':'neg'},
+      usr:{text:signed(usrG,1,'万'),cls:usrG>=0?'pos':'neg'},
+      arpu:{text:String(arpu),cls:''},
+      profit:{text:signed(profit,1,'pts'),cls:profit>=0?'pos':'neg'},
+      churn:{text:`${risk.toFixed(2)}%`,cls:risk<=1.85?'pos':'neg'},
+      nps:{text:`+${nps}pts`,cls:'pos'}
+    },
+    radarSim: [
+      clamp(58+revG*2.4,0,100),
+      clamp(62+usrG*1.6,0,100),
+      clamp(70+profit*4.5,0,100),
+      clamp(78+ne*14,0,100),
+      clamp(74+nps,0,100),
+      clamp(66+be*18+re*8,0,100)
+    ],
+    roiLabels: SCENARIO_META.comm.roiLabels,
+    roiValues: [
+      1.1-pe*0.8+be*0.5,
+      1.3+me*0.9+re*0.2,
+      1.5+ne*1.1+ue*0.4,
+      1.8+be*1.0+ue*0.4,
+      1.2+re*0.7+be*0.3,
+      1.4+ne*0.6+re*0.4
+    ].map(v=>clamp(v,0.2,4.8))
+  };
+}
+
+function aiScenario(){
+  const idc=getVal('s-ai-idc');
+  const rack=getVal('s-ai-rack');
+  const govern=getVal('s-ai-govern');
+  const models=getVal('s-ai-models');
+  const adopt=getVal('s-ai-adopt');
+  const cost=getVal('s-ai-cost');
+  setText('v-ai-idc',idc);
+  setText('v-ai-rack',rack);
+  setText('v-ai-govern',govern);
+  setText('v-ai-models',models);
+  setText('v-ai-adopt',adopt);
+  setText('v-ai-cost',cost);
+
+  const ie=(idc-24)/24;
+  const re=(rack-72)/72;
+  const ge=(govern-22)/22;
+  const me=(models-36)/36;
+  const ae=(adopt-46)/46;
+  const ce=(cost-18)/18;
+
+  const revG=+(9.2+ie*2.4+ge*2.6+me*1.9+ae*3.2+re*1.5+ce*1.2).toFixed(2);
+  const contract=+(12.5+ie*4.2+ae*5.6+me*3.8+ge*2.2).toFixed(1);
+  const roi=+(1.9+ie*0.35+ge*0.28+me*0.22+ae*0.41+re*0.18+ce*0.27).toFixed(2);
+  const costGain=+(6.8+ce*6.5+re*2.5+ge*1.6).toFixed(1);
+  const risk=+Math.max(2.1,7.6-ge*1.4-me*1.2-re*1.0-ce*0.8+ie*0.4).toFixed(2);
+  const maturity=Math.max(0,Math.round(8+ge*8+me*6+ae*7+re*4));
+
+  return {
+    boost: revG/100*0.11 + ae*0.03,
+    metrics: {
+      rev:{text:signed(revG,1,'%'),cls:revG>=0?'pos':'neg'},
+      usr:{text:signed(contract,1,'亿'),cls:contract>=0?'pos':'neg'},
+      arpu:{text:`${roi.toFixed(2)}x`,cls:''},
+      profit:{text:signed(costGain,1,'%'),cls:costGain>=0?'pos':'neg'},
+      churn:{text:`${risk.toFixed(2)}%`,cls:risk<=6?'pos':'neg'},
+      nps:{text:`+${maturity}pts`,cls:'pos'}
+    },
+    radarSim: [
+      clamp(52+ie*18+re*9,0,100),
+      clamp(50+ge*20,0,100),
+      clamp(46+me*18,0,100),
+      clamp(43+ae*22,0,100),
+      clamp(48+(roi-1.9)*28,0,100),
+      clamp(58+(6-risk)*5+ce*8,0,100)
+    ],
+    roiLabels: SCENARIO_META.ai.roiLabels,
+    roiValues: [
+      1.6+ie*0.8+re*0.2,
+      1.5+re*0.7+ce*0.5,
+      1.8+ge*1.0,
+      1.7+me*0.9+ge*0.3,
+      1.9+ae*1.1+me*0.4,
+      1.4+ce*1.2+re*0.3
+    ].map(v=>clamp(v,0.3,5.4))
+  };
+}
+
 // ===== SCENARIO ENGINE =====
 function updateScenario() {
-  const price=+document.getElementById('s-price').value;
-  const mkt=+document.getElementById('s-mkt').value;
-  const capex=+document.getElementById('s-capex').value;
-  const b2b=+document.getElementById('s-b2b').value;
-  const fg=+document.getElementById('s-5g').value;
-  const churn=+document.getElementById('s-churn').value;
-  document.getElementById('v-price').textContent=price;
-  document.getElementById('v-mkt').textContent=mkt;
-  document.getElementById('v-capex').textContent=capex;
-  document.getElementById('v-b2b').textContent=b2b;
-  document.getElementById('v-5g').textContent=fg;
-  document.getElementById('v-churn').textContent=churn;
-  const pe=(price-198)/198, me=(mkt-85)/85, be=(b2b-1200)/1200;
-  const boost=(-pe*0.15+me*0.08+be*0.06+(fg-75)/75*0.04+churn/100*0.03);
-  const revG=+(3.8+pe*(-8)+me*5+be*4+(fg-75)/75*2+churn/100*1.5).toFixed(2);
-  const usrG=+(6.8+me*4+(fg-75)/75*6-pe*8+churn/100*2).toFixed(1);
-  const arpuP=Math.round(price*0.88+22);
-  const profC=+(-pe*4+(capex<28?(28-capex)*0.08:-(capex-28)*0.06)+be*2.5).toFixed(1);
-  const churnP=+Math.max(0.6,1.84-churn/100*0.9).toFixed(2);
-  const npsP=Math.round(churn/100*10+be*8+me*5);
+  const modeCfg=SCENARIO_META[currentScenarioMode];
+  const snapshot=currentScenarioMode==='comm'?commScenario():aiScenario();
+  const history=HIST_SERIES[currentScenarioMode];
   const fill=document.getElementById('mc-fill');
   const status=document.getElementById('mc-status');
   if(status) status.textContent='计算中...';
@@ -839,54 +1046,53 @@ function updateScenario() {
     if(fill) fill.style.width='100%';
     setTimeout(()=>{
       if(fill) fill.style.width='0%';
-      const all=runAllAlgos(boost);
+      const all=runAllAlgos(history, snapshot.boost);
       const cur=all[currentAlgo];
       if(status) status.textContent='算法: '+cur.name+' | RMSE: '+cur.rmse+'亿';
-      const rmseEl=document.getElementById('algo-rmse');
-      if(rmseEl) rmseEl.textContent='RMSE: '+cur.rmse+'亿';
-      const setKPI=(id,val,sfx,isPos)=>{
-        const el=document.getElementById(id);
-        if(!el) return;
-        el.textContent=(isPos&&val>0?'+':'')+val.toFixed(1)+sfx;
-        el.className='sc-kv '+(isPos?(val>=0?'pos':'neg'):'');
-      };
-      setKPI('sc-rev',revG,'%',true);
-      const uel=document.getElementById('sc-usr');
-      if(uel){uel.textContent=(usrG>=0?'+':'')+usrG+'万';uel.className='sc-kv '+(usrG>=0?'pos':'neg');}
-      const ael=document.getElementById('sc-arpu');
-      if(ael){ael.textContent=arpuP;ael.className='sc-kv';}
-      setKPI('sc-profit',profC,'pts',true);
-      const cel=document.getElementById('sc-churn');
-      if(cel){cel.textContent=churnP+'%';cel.className='sc-kv '+(churnP<1.84?'pos':'neg');}
-      const nel=document.getElementById('sc-nps');
-      if(nel){nel.textContent='+'+(npsP>0?npsP:0)+'pts';nel.className='sc-kv pos';}
+      setText('algo-rmse','RMSE: '+cur.rmse+'亿');
+
+      setMetric('sc-rev',snapshot.metrics.rev.text,snapshot.metrics.rev.cls);
+      setMetric('sc-usr',snapshot.metrics.usr.text,snapshot.metrics.usr.cls);
+      setMetric('sc-arpu',snapshot.metrics.arpu.text,snapshot.metrics.arpu.cls);
+      setMetric('sc-profit',snapshot.metrics.profit.text,snapshot.metrics.profit.cls);
+      setMetric('sc-churn',snapshot.metrics.churn.text,snapshot.metrics.churn.cls);
+      setMetric('sc-nps',snapshot.metrics.nps.text,snapshot.metrics.nps.cls);
+
       const lastF=cur.forecast[cur.forecast.length-1];
-      const ciEl=document.getElementById('ci-val');
-      if(ciEl) ciEl.textContent=(lastF-cur.ci).toFixed(1)+'亿 ~ '+(lastF+cur.ci).toFixed(1)+'亿';
+      setText('ci-val',(lastF-cur.ci).toFixed(1)+'亿 ~ '+(lastF+cur.ci).toFixed(1)+'亿');
+
       if(scChart){
-        scChart.data.datasets[1].data=[
-          Math.min(100,55+revG*2.5),Math.min(100,60+usrG*1.5),
-          Math.min(100,70+profC*4),Math.min(100,80+(fg-75)*0.6),
-          Math.min(100,75+npsP),Math.min(100,65+be*25)
-        ];
+        scChart.data.labels=modeCfg.radarLabels;
+        scChart.data.datasets[0].data=modeCfg.radarBaseline;
+        scChart.data.datasets[1].data=snapshot.radarSim;
         scChart.update();
       }
-      updateForecastChart(cur);
-      updateAlgoCompare(all);
+      updateROIChart(snapshot.roiLabels, snapshot.roiValues);
+      updateForecastChart(cur, modeCfg, history);
+      updateAlgoCompare(all, modeCfg);
     },150);
   },currentAlgo==='mc'?800:300);
 }
 function resetScenario(){
-  document.getElementById('s-price').value=198;
-  document.getElementById('s-mkt').value=85;
-  document.getElementById('s-capex').value=28;
-  document.getElementById('s-b2b').value=1200;
-  document.getElementById('s-5g').value=75;
-  document.getElementById('s-churn').value=50;
+  if(currentScenarioMode==='comm'){
+    document.getElementById('s-comm-price').value=198;
+    document.getElementById('s-comm-mkt').value=82;
+    document.getElementById('s-comm-5g').value=75;
+    document.getElementById('s-comm-bundle').value=48;
+    document.getElementById('s-comm-net').value=16;
+    document.getElementById('s-comm-response').value=55;
+  }else{
+    document.getElementById('s-ai-idc').value=24;
+    document.getElementById('s-ai-rack').value=72;
+    document.getElementById('s-ai-govern').value=22;
+    document.getElementById('s-ai-models').value=36;
+    document.getElementById('s-ai-adopt').value=46;
+    document.getElementById('s-ai-cost').value=18;
+  }
   updateScenario();
 }
 
-function updateForecastChart(res){
+function updateForecastChart(res, modeCfg, history){
   const histLabels=['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
   const allLabels=[...histLabels,'4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
   if(charts['c-forecast']) charts['c-forecast'].destroy();
@@ -895,8 +1101,8 @@ function updateForecastChart(res){
     data:{
       labels:allLabels,
       datasets:[
-        {label:'历史',data:[...HIST_REV,...Array(12).fill(null)],borderColor:'#7e96b4',fill:false,tension:.4,pointRadius:2,borderWidth:1.5,borderDash:[3,2]},
-        {label:res.name+' 预测',data:[...Array(11).fill(null),HIST_REV[11],...res.forecast],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:3,borderWidth:2},
+        {label:'历史',data:[...history,...Array(12).fill(null)],borderColor:'#7e96b4',fill:false,tension:.4,pointRadius:2,borderWidth:1.5,borderDash:[3,2]},
+        {label:res.name+' · '+modeCfg.forecastSeriesName+'预测',data:[...Array(11).fill(null),history[11],...res.forecast],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:3,borderWidth:2},
         {label:'P90',data:[...Array(12).fill(null),...res.p90],borderColor:'rgba(59,130,246,.2)',backgroundColor:'rgba(59,130,246,.08)',fill:'-1',tension:.4,pointRadius:0,borderWidth:0},
         {label:'P10',data:[...Array(12).fill(null),...res.p10],borderColor:'rgba(59,130,246,.2)',backgroundColor:'rgba(59,130,246,.08)',fill:false,tension:.4,pointRadius:0,borderWidth:0}
       ]
@@ -905,7 +1111,7 @@ function updateForecastChart(res){
   });
 }
 
-function updateAlgoCompare(all){
+function updateAlgoCompare(all, modeCfg){
   const algos=['lr','es','arima','bayes','mc'];
   const names=algos.map(k=>all[k].name);
   const vals=algos.map(k=>all[k].forecast[11]);
@@ -915,14 +1121,17 @@ function updateAlgoCompare(all){
   charts['c-algo-compare']=new Chart('c-algo-compare',{
     type:'bar',
     data:{labels:names,datasets:[
-      {label:'12月预测营收',data:vals,backgroundColor:colors.map(c=>c+'bb'),borderRadius:5},
+      {label:'12月'+modeCfg.forecastSeriesName+'预测',data:vals,backgroundColor:colors.map(c=>c+'bb'),borderRadius:5},
       {label:'置信区间(±)',data:cis,backgroundColor:colors.map(c=>c+'44'),borderRadius:5}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(26,36,54,.8)'},ticks:{callback:v=>v+'亿'}}}}
   });
 }
 
-setTimeout(()=>{ if(document.getElementById('s-price')) updateScenario(); }, 80);
+setTimeout(()=>{
+  const btn=document.querySelector('#scenario-mode-tabs .algo-btn[data-s-mode="comm"]');
+  if(btn) setScenarioMode(btn,'comm');
+}, 80);
 
 // ===== KEYBOARD NAVIGATION =====
 document.addEventListener('keydown', e => {
@@ -1105,7 +1314,7 @@ ${'='.repeat(50)}
 · API接口文档、用户手册、培训材料
 
 【下一步行动】
-1. 完成三大主业拆分口径落表与校验
+1. 完成三大服务拆分口径落表与校验
 2. 建立日级数据SLA与异常闭环机制
 3. 优先上线风险雷达与场景模拟MVP
 4. 按季度进行敏捷迭代并扩展应用场景
@@ -1132,7 +1341,7 @@ function exportAPIDoc() {
 - GET /api/dashboard/overview
   返回三维经营指标
 - GET /api/finance/split
-  返回三大主业拆分明细
+  返回三大服务拆分明细
 - GET /api/risk/radar
   返回风险雷达与概率评分
 - POST /api/scenario/simulate
@@ -1162,18 +1371,18 @@ function exportUserManual() {
 
 二、模块使用
 1) 决策总览: 查看经营效益、发展效率、运营效能三维指数
-2) 财务分析: 查看三大主业拆分、口径状态与趋势
+2) 财务分析: 查看三大服务拆分、口径状态与趋势
 3) 风险研判: 查看风险雷达、概率评分与应对进展
 4) 场景模拟: 调整变量后生成未来12个月预测
 5) 数据接入: 查看内外部数据源状态与日级刷新情况
 
 三、导出能力
-- CSV: 三大主业拆分数据
+- CSV: 三大服务拆分数据
 - 报告: 项目经营报告
 - API文档/用户手册/培训材料: 一键导出
 
 四、注意事项
-- 若发现口径冲突，请优先核对《三大主业口径说明》
+- 若发现口径冲突，请优先核对《三大服务口径说明》
 - 若模型准确率低于85%，请触发模型回测与重训流程
 `;
   downloadText('AI经营决策仿真平台_用户手册_'+new Date().toISOString().slice(0,10)+'.md', manual);
@@ -1283,7 +1492,7 @@ function addStreamRow() {
 function addEventRow() {
   if(!eventEl) return;
   const events = [
-    {cls:'row-fin', tag:'口径', msg:`口径库更新: 三大主业映射规则 v${Math.floor(Math.random()*5+3)}.${Math.floor(Math.random()*10)} 发布`},
+    {cls:'row-fin', tag:'口径', msg:`口径库更新: 三大服务映射规则 v${Math.floor(Math.random()*5+3)}.${Math.floor(Math.random()*10)} 发布`},
     {cls:'row-net', tag:'时效', msg:`日级SLA检测: ${['ERP','CRM','B域','O域'][Math.floor(Math.random()*4)]} 延迟 ${(0.8+Math.random()*1.4).toFixed(1)}h`},
     {cls:'row-mkt', tag:'竞对', msg:`披露抓取: ${['CSL','3HK','SmarTone'][Math.floor(Math.random()*3)]} 新增财报字段 ${Math.floor(Math.random()*4+1)} 项`},
     {cls:'row-risk', tag:'模型', msg:`模型回测: 场景模拟准确率 ${(82+Math.random()*8).toFixed(1)}%`},
@@ -1406,7 +1615,7 @@ const AI_SETS = [
   [
     {cls:'ai-good',   label:'优势', text:'内部经营数据基础扎实，ERP/CRM/B域/O域可支持“经营效益、发展效率、运营效能”三维监测。'},
     {cls:'ai-warn',   label:'风险', text:'高优先级风险是数据时效与质量波动，若日级链路不稳会影响风险雷达有效性。'},
-    {cls:'ai-info',   label:'机遇', text:'通过统一口径说明和自动映射，可显著提升三大主业拆分效率与财务对比可信度。'},
+    {cls:'ai-info',   label:'机遇', text:'通过统一口径说明和自动映射，可显著提升三大服务拆分效率与财务对比可信度。'},
     {cls:'ai-action', label:'行动', text:'①固化口径说明入库 ②设置日级SLA与告警 ③建立缺失字段自动补数规则。'}
   ],
   [
@@ -1442,7 +1651,7 @@ const ALERTS = [
   {t:'高', c:'#f43f5e', msg:'风险1预警：内部数据延迟上升，日级刷新稳定性下降'},
   {t:'高', c:'#f43f5e', msg:'风险2预警：场景模型在外部口径变动场景准确率回落'},
   {t:'中', c:'#fb923c', msg:'竞对披露新增字段缺失，横向可比性下降'},
-  {t:'中', c:'#3b82f6', msg:'三大主业拆分口径待复核，财务归因需人工确认'},
+  {t:'中', c:'#3b82f6', msg:'三大服务拆分口径待复核，财务归因需人工确认'},
   {t:'低', c:'#22c55e', msg:'MVP路线按计划推进，当前交付完成度 63%'},
 ];
 const alertStream = document.getElementById('alert-stream');
