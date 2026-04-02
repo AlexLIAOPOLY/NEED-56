@@ -242,6 +242,48 @@
     <div class="kpi k-up"><div class="kl">5G 小区数</div><div class="kv">8,642<span class="ku">个</span></div><div class="kc up">↑ 6.3%</div></div>
     <div class="kpi k-up"><div class="kl">平均下载速率</div><div class="kv">387<span class="ku">Mbps</span></div><div class="kc up">↑ 18%</div></div>
     <div class="kpi k-warn"><div class="kl">月度投诉工单</div><div class="kv">1,248<span class="ku">件</span></div><div class="kc dn2">↑ 3.2% 关注</div></div>
+    <div class="kpi k-warn"><div class="kl">B域异常客户行为</div><div class="kv">37<span class="ku">户</span></div><div class="kc dn2">漫游骤减/使用异动</div></div>
+    <div class="kpi k-warn"><div class="kl">O域流程积压</div><div class="kv">128<span class="ku">单</span></div><div class="kc dn2">采购与审批超时</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="ct">B域漫游行为异常监控（近7日）</span><span class="ca" style="color:var(--dn)">6户高风险</span></div>
+      <div class="cw h180"><canvas id="c-b-roam"></canvas></div>
+      <div class="msr"><span class="msr-l">漫游流量骤减客户</span><span class="msr-r" style="color:var(--dn)">12 户</span></div>
+      <div class="msr"><span class="msr-l">平均跌幅</span><span class="msr-r" style="color:var(--wn)">-43.8%</span></div>
+      <div class="msr"><span class="msr-l">关联信控风险标签</span><span class="msr-r">8 户</span></div>
+      <div class="msr"><span class="msr-l">已触达客户经理</span><span class="msr-r" style="color:var(--a3)">100%</span></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">O域采购与流程效率监控</span><span class="ca" style="color:var(--wn)">2项超阈值</span></div>
+      <div class="cw h180"><canvas id="c-o-proc"></canvas></div>
+      <div class="msr"><span class="msr-l">采购平均审批时长</span><span class="msr-r" style="color:var(--wn)">6.8 天</span></div>
+      <div class="msr"><span class="msr-l">超SLA流程占比</span><span class="msr-r" style="color:var(--dn)">14.2%</span></div>
+      <div class="msr"><span class="msr-l">供应商准入待办</span><span class="msr-r">27 单</span></div>
+      <div class="msr"><span class="msr-l">预算释放延迟金额</span><span class="msr-r" style="color:var(--wn)">1,860 万HKD</span></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="ct">B域客户行为异常清单</span><span class="ca">自动识别</span></div>
+      <table class="tbl"><thead><tr><th>客户ID</th><th>行业</th><th>异常信号</th><th>偏离幅度</th><th>状态</th><th>责任团队</th></tr></thead>
+      <tbody>
+        <tr><td>B-10231</td><td>物流</td><td>漫游流量骤减</td><td><span class="tag tr2">-61%</span></td><td><span class="tag ta">处理中</span></td><td>大客维系一组</td></tr>
+        <tr><td>B-08762</td><td>零售</td><td>国际套餐停用</td><td><span class="tag tr2">-54%</span></td><td><span class="tag ta">回访中</span></td><td>行业运营组</td></tr>
+        <tr><td>B-21987</td><td>金融</td><td>跨境流量波动</td><td><span class="tag ta">+132%</span></td><td><span class="tag tb2">复核中</span></td><td>风控与信控</td></tr>
+        <tr><td>B-17640</td><td>制造</td><td>夜间用量归零</td><td><span class="tag tr2">-47%</span></td><td><span class="tag tg">已修复</span></td><td>客户成功组</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">O域内部运营异常清单</span><span class="ca">流程引擎</span></div>
+      <table class="tbl"><thead><tr><th>时间</th><th>流程</th><th>异常类型</th><th>当前值</th><th>SLA</th><th>责任部门</th></tr></thead>
+      <tbody>
+        <tr><td>03-31 10:20</td><td>采购审批</td><td>审批链超时</td><td><span class="tag ta">9.2天</span></td><td>5天</td><td>采购中心</td></tr>
+        <tr><td>03-31 09:05</td><td>供应商准入</td><td>资质回传延迟</td><td><span class="tag ta">37单</span></td><td>20单</td><td>法务/采购</td></tr>
+        <tr><td>03-30 18:40</td><td>预算释放</td><td>财务挂起</td><td><span class="tag tr2">11单</span></td><td>4单</td><td>财务共享</td></tr>
+        <tr><td>03-30 16:15</td><td>合同归档</td><td>字段缺失</td><td><span class="tag tb2">26份</span></td><td>10份</td><td>内控管理</td></tr>
+      </tbody></table>
+    </div>
   </div>
   <div class="g2">
     <div class="card"><div class="ch"><span class="ct">网络质量趋势</span></div><div class="cw h200"><canvas id="c-net"></canvas></div></div>
@@ -265,12 +307,14 @@
       <div class="msr"><span class="msr-l">首次解决率</span><span class="msr-r" style="color:var(--wn)">78.3%</span></div>
     </div>
   </div>
-  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">近期异常事件</span><span class="ca">全部记录</span></div>
+  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">近期异常事件（网络+B域+O域）</span><span class="ca">全部记录</span></div>
     <table class="tbl"><thead><tr><th>时间</th><th>类型</th><th>区域</th><th>影响用户</th><th>时长</th><th>状态</th><th>处置团队</th></tr></thead>
     <tbody>
       <tr><td>03-29 14:22</td><td>核心网故障</td><td>九龙东</td><td>2,340</td><td>18min</td><td><span class="tag tg">已恢复</span></td><td>网络运营</td></tr>
       <tr><td>03-28 09:15</td><td>基站断电</td><td>沙田</td><td>856</td><td>42min</td><td><span class="tag tg">已恢复</span></td><td>工程维护</td></tr>
+      <tr><td>03-28 08:40</td><td>B域漫游骤减</td><td>跨境客户群</td><td>12户</td><td>3h10m</td><td><span class="tag ta">处理中</span></td><td>大客运营</td></tr>
       <tr><td>03-27 22:08</td><td>DDoS攻击</td><td>全网</td><td>0</td><td>6min</td><td><span class="tag tg">已防御</span></td><td>安全运营</td></tr>
+      <tr><td>03-27 16:12</td><td>采购审批超时</td><td>总部流程</td><td>31单</td><td>9h35m</td><td><span class="tag ta">处理中</span></td><td>采购中心</td></tr>
       <tr><td>03-26 11:30</td><td>传输链路降级</td><td>元朗</td><td>4,120</td><td>1h23m</td><td><span class="tag tg">已恢复</span></td><td>传输维护</td></tr>
     </tbody></table>
   </div>
@@ -699,6 +743,8 @@ C('c-cost',{type:'doughnut',data:{labels:['网络运营','人力成本','销售�
 C('c-profit',{type:'line',data:{labels:['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'],datasets:[{label:'净利润',data:[380,392,405,418,400,425,438,442,428,445,452,460],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:1.5},{label:'EBITDA',data:[580,592,608,622,610,630,645,652,638,660,668,675],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:2,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'M'}}}}});
 C('c-net',{type:'line',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'网络可用率(%)',data:[99.93,99.94,99.95,99.96,99.95,99.96],borderColor:'#22c55e',fill:false,tension:.3,pointRadius:3,borderWidth:1.5},{label:'5G速率(x10Mbps)',data:[32.1,33.4,34.2,36.8,38.2,38.7],borderColor:'#3b82f6',fill:false,tension:.3,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor}}}}});
 C('c-grow',{type:'bar',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'净增用户(万)',data:[5.2,6.1,7.8,8.2,6.5,6.8],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'5G净增(万)',data:[4.1,5.2,6.8,7.1,5.8,5.9],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor}}}}});
+C('c-b-roam',{type:'line',data:{labels:['03-25','03-26','03-27','03-28','03-29','03-30','03-31'],datasets:[{label:'漫游流量基线(GB)',data:[2850,2910,2890,2960,3005,3040,3085],borderColor:'#7e96b4',borderDash:[4,3],fill:false,tension:.35,pointRadius:2,borderWidth:1.2},{label:'实际漫游流量(GB)',data:[2810,2865,2440,2230,2360,2485,2560],borderColor:'#f43f5e',backgroundColor:'rgba(244,63,94,.08)',fill:true,tension:.35,pointRadius:3,borderWidth:1.8},{label:'预警阈值(GB)',data:[2450,2450,2450,2450,2450,2450,2450],borderColor:'#f59e0b',fill:false,tension:0,pointRadius:0,borderWidth:1.2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'GB'}}}}});
+C('c-o-proc',{type:'bar',data:{labels:['采购申请','合同审批','供应商准入','预算释放','项目立项','验收归档'],datasets:[{label:'当前耗时(天)',data:[3.8,6.8,7.4,5.2,4.6,2.9],backgroundColor:'rgba(59,130,246,.72)',borderRadius:4},{label:'SLA(天)',type:'line',data:[3,5,5,4,4,3],borderColor:'#f59e0b',fill:false,tension:0,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'天'}}}}});
 C('c-arpu',{type:'line',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'综合ARPU',data:[202,200,199,198,198,198],borderColor:'#f59e0b',fill:false,tension:.3,pointRadius:3,borderWidth:1.5},{label:'5G ARPU',data:[238,235,234,232,231,230],borderColor:'#3b82f6',fill:false,tension:.3,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>'$'+v}}}}});
 C('c-mkt',{type:'doughnut',data:{labels:['CMHK','CSL/1O1O','SmarTone','3HK','其他'],datasets:[{data:[28.4,24.1,21.8,19.3,6.4],backgroundColor:['#3b82f6','#22d3ee','#22c55e','#f59e0b','#818cf8'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 
