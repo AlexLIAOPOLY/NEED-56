@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: need-56
+    runtime: static
+    repo: https://github.com/<your-org-or-user>/<your-repo>
+    branch: main
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true

@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="zh-CN" id="root" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI经营决策仿真平台</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css?v=20260402-tickerloop3">
+<style>
+.role-wrap{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  height:36px !important;
+  border:1px solid var(--border2) !important;
+  border-radius:12px !important;
+  padding:0 10px !important;
+  background:var(--bg3) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03) !important;
+}
+.role-wrap::before,
+.role-wrap::after{
+  content:none !important;
+  display:none !important;
+}
+.role-select{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  -moz-appearance:none !important;
+  background-image:none !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  color:var(--t) !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  line-height:30px !important;
+  height:30px !important;
+  min-width:84px !important;
+  padding:0 !important;
+  cursor:pointer !important;
+}
+.role-select::-ms-expand{display:none !important;}
+.role-caret{
+  width:8px !important;
+  height:8px !important;
+  border-right:2px solid var(--t2) !important;
+  border-bottom:2px solid var(--t2) !important;
+  transform:rotate(45deg) translateY(-1px) !important;
+  flex:0 0 auto !important;
+}
+.role-sep{
+  width:1px !important;
+  height:18px !important;
+  background:var(--border2) !important;
+  opacity:.95 !important;
+  flex:0 0 auto !important;
+}
+.role-tag{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:40px !important;
+  height:28px !important;
+  font-size:10px !important;
+  line-height:1 !important;
+  font-weight:700 !important;
+  padding:0 10px !important;
+  border-radius:999px !important;
+  border:1px solid var(--border2) !important;
+  letter-spacing:.3px !important;
+}
+.role-tag.exec{color:#22c55e !important;border-color:rgba(34,197,94,.45) !important;background:rgba(34,197,94,.08) !important;}
+.role-tag.analyst{color:#60a5fa !important;border-color:rgba(96,165,250,.45) !important;background:rgba(96,165,250,.08) !important;}
+.role-tag.staff{color:#f59e0b !important;border-color:rgba(245,158,11,.45) !important;background:rgba(245,158,11,.08) !important;}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="slogo">
+    <div class="sl-row"><div class="sl-mark">AI</div><div><div class="sl-name">决策仿真平台</div><div class="sl-sub">AI DECISION TWIN v1.0</div></div></div>
+    <div class="sys-live"><div class="ldot"></div><span>实时数据同步中</span></div>
+  </div>
+  <div class="search-wrap"><input class="search-box" id="search-box" placeholder="搜索模块..." oninput="searchNav(this.value)"></div>
+  <nav class="nav" id="main-nav">
+    <div class="ngl">核心模块</div>
+    <div class="ni act" data-page="0" onclick="goPage(this,0)"><span class="ni-d"></span>决策总览</div>
+    <div class="ni" data-page="1" onclick="goPage(this,1)"><span class="ni-d"></span>财务分析</div>
+    <div class="ni" data-page="2" onclick="goPage(this,2)"><span class="ni-d"></span>运营监控</div>
+    <div class="ni" data-page="3" onclick="goPage(this,3)"><span class="ni-d"></span>市场洞察<span class="ni-b" id="mkt-badge">3</span></div>
+    <div class="ngl" style="margin-top:4px">智能决策</div>
+    <div class="ni" data-page="4" onclick="goPage(this,4)"><span class="ni-d"></span>风险研判<span class="ni-b" id="risk-badge">2</span></div>
+    <div class="ni" data-page="5" onclick="goPage(this,5)"><span class="ni-d"></span>场景模拟</div>
+    <div class="ni" data-page="6" onclick="goPage(this,6)"><span class="ni-d"></span>行业趋势</div>
+    <div class="ngl" style="margin-top:4px">数据中台</div>
+    <div class="ni" data-page="7" onclick="goPage(this,7)"><span class="ni-d"></span>数据接入<span class="ni-b" style="background:var(--a3)">LIVE</span></div>
+  </nav>
+  <div class="sfooter">
+    <div class="sfooter-btns">
+      <button class="sync-btn" id="sync-btn" onclick="syncData()">同步数据</button>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="切换亮/暗色">☀</button>
+    </div>
+    <div class="sf-time" id="sf-time">--:--:--</div>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <span class="tb-title" id="tb-title">决策总览</span>
+    <span class="tb-sep">/</span>
+    <span class="tb-sub" id="tb-sub">三维经营监测 · 内外部数据融合与日级感知</span>
+    <div class="tb-r">
+      <div class="role-wrap" title="分级权限管理">
+        <select class="role-select" id="role-select" onchange="switchRole(this.value)">
+          <option value="exec">管理层</option>
+          <option value="analyst">规划分析</option>
+          <option value="staff">普通员工</option>
+        </select>
+        <span class="role-caret" aria-hidden="true"></span>
+        <span class="role-sep" aria-hidden="true"></span>
+        <span class="role-tag exec" id="role-tag">L3</span>
+      </div>
+      <div class="notif-wrap" id="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotif()">通知<span class="notif-dot" id="notif-dot">4</span></button>
+        <div class="notif-panel" id="notif-panel" style="display:none">
+          <div class="notif-header"><span>系统通知</span><span class="ca" onclick="clearNotifs()">全部已读</span></div>
+          <div class="notif-item ni-d-item"><div class="ni-icon"></div><div><div class="ni-msg">风险1：日级刷新稳定性下降，需优先排查延迟链路</div><div class="ni-time">2分钟前 · 高优先级</div></div></div>
+          <div class="notif-item ni-w-item"><div class="ni-icon"></div><div><div class="ni-msg">风险2：场景模型在外部口径变化场景准确率回落</div><div class="ni-time">18分钟前 · 模型预警</div></div></div>
+          <div class="notif-item ni-i-item"><div class="ni-icon"></div><div><div class="ni-msg">三大主业口径映射新增冲突字段，待跨部门确认</div><div class="ni-time">1小时前 · 数据治理</div></div></div>
+          <div class="notif-item ni-s-item"><div class="ni-icon"></div><div><div class="ni-msg">MVP阶段里程碑达成 63%，进度符合Q2计划</div><div class="ni-time">3小时前 · 项目进展</div></div></div>
+        </div>
+      </div>
+      <span class="tb-time" id="tb-time">--:--:--</span>
+      <span class="bdg bdg-live">LIVE</span>
+    </div>
+  </div>
+  <div class="ticker-bar" id="ticker-bar"></div>
+  <div class="filter-bar">
+    <span class="fb-label">时间范围</span>
+    <button class="fb-btn" onclick="setRange(this,'1M')">近1月</button>
+    <button class="fb-btn act" onclick="setRange(this,'3M')">近3月</button>
+    <button class="fb-btn" onclick="setRange(this,'6M')">近6月</button>
+    <button class="fb-btn" onclick="setRange(this,'1Y')">近1年</button>
+    <span class="fb-sep"></span>
+    <button class="fb-btn" onclick="setRange(this,'YTD')">YTD</button>
+    <details class="export-menu">
+      <summary class="export-trigger">导出</summary>
+      <div class="export-panel">
+        <button class="export-item" onclick="exportCSV()">导出 CSV</button>
+        <button class="export-item" onclick="exportReport()">导出报告</button>
+        <button class="export-item" onclick="exportAPIDoc()">API文档</button>
+        <button class="export-item" onclick="exportUserManual()">用户手册</button>
+        <button class="export-item" onclick="exportTrainingPack()">培训材料</button>
+      </div>
+    </details>
+  </div>
+  <div class="content">
+
+<!-- P0 决策总览 -->
+<div class="page act" id="p0">
+  <div class="g4">
+    <div class="kpi k-up"><div class="kl">数据接入覆盖率</div><div class="kv">78<span class="ku">%</span></div><div class="kc up">↑ 6pts 本季度</div><div class="ks">已打通 14/18 关键系统</div></div>
+    <div class="kpi k-up"><div class="kl">日级刷新达成率</div><div class="kv">91<span class="ku">%</span></div><div class="kc up">目标：日级监测</div><div class="ks">月度复盘转向动态监测</div></div>
+    <div class="kpi k-up"><div class="kl">AI模型可用数</div><div class="kv">3<span class="ku">个</span></div><div class="kc up">趋势/风险/场景</div><div class="ks">历史回测准确率 85%+</div></div>
+    <div class="kpi k-up"><div class="kl">MVP进度</div><div class="kv">63<span class="ku">%</span></div><div class="kc up">6个月测试版</div><div class="ks">一年内完成正式落地</div></div>
+  </div>
+  <div class="g4">
+    <div class="kpi k-up"><div class="kl">经营效益指数</div><div class="kv">76<span class="ku">/100</span></div><div class="kc up">收入与利润双改善</div><div class="ks">对应财务与价值创造能力</div></div>
+    <div class="kpi k-up"><div class="kl">发展效率指数</div><div class="kv">69<span class="ku">/100</span></div><div class="kc up">用户增长稳定</div><div class="ks">主看规模增长与拓展效率</div></div>
+    <div class="kpi k-up"><div class="kl">运营效能指数</div><div class="kv">73<span class="ku">/100</span></div><div class="kc up">工单时效改善</div><div class="ks">主看成本与流程效率</div></div>
+    <div class="kpi k-up"><div class="kl">取数自动化率</div><div class="kv">62<span class="ku">%</span></div><div class="kc up">目标降本 60%-70%</div><div class="ks">释放分析人力做洞察</div></div>
+  </div>
+  <div class="g3" style="margin-bottom:12px">
+    <div class="card"><div class="ch"><span class="ct">三维指数看板</span></div><div style="display:flex;justify-content:space-around;align-items:center;padding:4px 0"><div style="text-align:center"><canvas id="gauge-health" width="110" height="70"></canvas><div style="font-size:9px;color:var(--t3);margin-top:2px">经营效益</div></div><div style="text-align:center"><canvas id="gauge-risk" width="110" height="70"></canvas><div style="font-size:9px;color:var(--t3);margin-top:2px">发展效率</div></div><div style="text-align:center"><canvas id="gauge-nps" width="110" height="70"></canvas><div style="font-size:9px;color:var(--t3);margin-top:2px">运营效能</div></div></div></div>
+    <div class="card cs2"><div class="ch"><span class="ct">关键里程碑 / 战略进度</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="br"><span class="bl">数据整合引擎</span><div class="bt"><div class="bf" style="width:63%;background:var(--a)"></div></div><span class="bv">63/100</span></div>
+        <div class="br"><span class="bl">风险雷达</span><div class="bt"><div class="bf" style="width:58%;background:var(--a2)"></div></div><span class="bv">58/100</span></div>
+        <div class="br"><span class="bl">场景模拟引擎</span><div class="bt"><div class="bf" style="width:52%;background:var(--pu)"></div></div><span class="bv">52/100</span></div>
+        <div class="br"><span class="bl">分级权限体系</span><div class="bt"><div class="bf" style="width:40%;background:var(--a4)"></div></div><span class="bv">40/100</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="g32">
+    <div class="card"><div class="ch"><span class="ct">三大主业收入趋势（亿 HKD）</span><span class="ca" onclick="exportCSV()">导出</span></div><div class="cw h200"><canvas id="c-rev-chart"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">三大主业收入占比</span></div><div class="cw h200"><canvas id="c-biz"></canvas></div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ch"><span class="ct">实时告警流</span><span class="ca" id="alert-count" style="color:var(--dn)">4 条未读</span></div><div class="alert-stream" id="alert-stream"></div></div>
+    <div class="card"><div class="ch"><span class="ct">三维指标结构（指数）</span></div><div class="cw h160"><canvas id="c-usr"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">指标样例（可直接复用）</span></div>
+      <div class="br"><span class="bl">经营效益-收入增长</span><div class="bt"><div class="bf" style="width:82%;background:var(--a)"></div></div><span class="bv">82</span></div>
+      <div class="br"><span class="bl">经营效益-利润率</span><div class="bt"><div class="bf" style="width:74%;background:var(--a2)"></div></div><span class="bv">74</span></div>
+      <div class="br"><span class="bl">发展效率-5G净增</span><div class="bt"><div class="bf" style="width:69%;background:var(--a3)"></div></div><span class="bv">69</span></div>
+      <div class="br"><span class="bl">发展效率-政企拓展</span><div class="bt"><div class="bf" style="width:63%;background:var(--a4)"></div></div><span class="bv">63</span></div>
+      <div class="br"><span class="bl">运营效能-工单闭环</span><div class="bt"><div class="bf" style="width:77%;background:var(--pu)"></div></div><span class="bv">77</span></div>
+      <div class="br"><span class="bl">运营效能-资源利用</span><div class="bt"><div class="bf" style="width:71%;background:var(--a3)"></div></div><span class="bv">71</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- P1 财务分析 -->
+<div class="page" id="p1">
+  <div class="g4">
+    <div class="kpi k-up"><div class="kl">三大主业收入</div><div class="kv">207.8<span class="ku">亿HKD</span></div><div class="kc up">占总收入 93.7%</div></div>
+    <div class="kpi k-up"><div class="kl">主业拆分完成率</div><div class="kv">68<span class="ku">%</span></div><div class="kc up">口径文件映射中</div></div>
+    <div class="kpi k-warn"><div class="kl">口径一致率</div><div class="kv">86<span class="ku">%</span></div><div class="kc dn2">仍有跨系统差异</div></div>
+    <div class="kpi k-up"><div class="kl">可追溯明细覆盖</div><div class="kv">72<span class="ku">%</span></div><div class="kc up">已落库到日级</div></div>
+  </div>
+  <div class="g21">
+    <div class="card"><div class="ch"><span class="ct">三大主业季度收入拆解（亿HKD）</span><span class="ca" onclick="exportCSV()">导出 CSV</span></div><div class="cw h240"><canvas id="c-fin1"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">成本结构分布</span></div><div class="cw h240"><canvas id="c-cost"></canvas></div></div>
+  </div>
+  <div class="g3">
+    <div class="card cs2"><div class="ch"><span class="ct">净利润 &amp; EBITDA 趋势（百万HKD）</span></div><div class="cw h200"><canvas id="c-profit"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">财务健康指标</span></div>
+      <div class="msr"><span class="msr-l">资产负债率</span><span class="msr-r">42.3%</span></div>
+      <div class="msr"><span class="msr-l">流动比率</span><span class="msr-r">1.38</span></div>
+      <div class="msr"><span class="msr-l">净利润率</span><span class="msr-r">22.3%</span></div>
+      <div class="msr"><span class="msr-l">ROE</span><span class="msr-r">18.7%</span></div>
+      <div class="msr"><span class="msr-l">ROA</span><span class="msr-r">8.4%</span></div>
+      <div class="msr"><span class="msr-l">Capex/Rev</span><span class="msr-r">12.8%</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">三大主业财务拆分明细（试算口径）</span><span class="ca" onclick="exportCSV()">导出</span></div>
+    <table class="tbl"><thead><tr><th>主业条线</th><th>营收（亿）</th><th>同比</th><th>毛利率</th><th>净利润（亿）</th><th>收入占比</th><th>口径状态</th></tr></thead>
+    <tbody>
+      <tr><td class="hi">个人移动</td><td>150.6</td><td><span class="tag tg">+4.2%</span></td><td>48.3%</td><td>28.6</td><td>67.9%</td><td><span class="tag tg">已对齐</span></td></tr>
+      <tr><td class="hi">家庭宽带</td><td>32.4</td><td><span class="tag tg">+2.1%</span></td><td>41.7%</td><td>6.8</td><td>14.6%</td><td><span class="tag tg">已对齐</span></td></tr>
+      <tr><td class="hi">政企服务</td><td>24.8</td><td><span class="tag tg">+8.6%</span></td><td>55.2%</td><td>7.2</td><td>11.2%</td><td><span class="tag tb2">待复核</span></td></tr>
+      <tr><td class="hi">国际及漫游</td><td>8.6</td><td><span class="tag tr2">-3.4%</span></td><td>38.1%</td><td>1.2</td><td>3.9%</td><td><span class="tag ta">补充口径</span></td></tr>
+      <tr><td class="hi">数字服务</td><td>5.4</td><td><span class="tag tg">+22.3%</span></td><td>62.8%</td><td>1.8</td><td>2.4%</td><td><span class="tag tp">研究映射</span></td></tr>
+    </tbody></table>
+    <div class="alt alt-i" style="margin-top:10px">拆分口径以《三大主业口径说明》为准；未披露或跨口径字段暂按战略部/业务研究结果进行映射。</div>
+  </div>
+</div>
+
+<!-- P2 运营监控 -->
+<div class="page" id="p2">
+  <div class="g4">
+    <div class="kpi k-up"><div class="kl">网络可用率</div><div class="kv">99.96<span class="ku">%</span></div><div class="kc up">达标 SLA</div></div>
+    <div class="kpi k-up"><div class="kl">5G 小区数</div><div class="kv">8,642<span class="ku">个</span></div><div class="kc up">↑ 6.3%</div></div>
+    <div class="kpi k-up"><div class="kl">平均下载速率</div><div class="kv">387<span class="ku">Mbps</span></div><div class="kc up">↑ 18%</div></div>
+    <div class="kpi k-warn"><div class="kl">月度投诉工单</div><div class="kv">1,248<span class="ku">件</span></div><div class="kc dn2">↑ 3.2% 关注</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="ct">网络质量趋势</span></div><div class="cw h200"><canvas id="c-net"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">用户净增趋势（万人）</span></div><div class="cw h200"><canvas id="c-grow"></canvas></div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ch"><span class="ct">地区5G覆盖率</span></div>
+      <div class="br"><span class="bl">香港岛</span><div class="bt"><div class="bf" style="width:98%;background:var(--a3)"></div></div><span class="bv">98%</span></div>
+      <div class="br"><span class="bl">九龙</span><div class="bt"><div class="bf" style="width:96%;background:var(--a3)"></div></div><span class="bv">96%</span></div>
+      <div class="br"><span class="bl">新界</span><div class="bt"><div class="bf" style="width:91%;background:var(--a)"></div></div><span class="bv">91%</span></div>
+      <div class="br"><span class="bl">大屿山</span><div class="bt"><div class="bf" style="width:84%;background:var(--a4)"></div></div><span class="bv">84%</span></div>
+      <div class="br"><span class="bl">离岛</span><div class="bt"><div class="bf" style="width:72%;background:var(--wn)"></div></div><span class="bv">72%</span></div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">ARPU趋势（HKD）</span></div><div class="cw h160"><canvas id="c-arpu"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">服务质量SLA</span></div>
+      <div class="msr"><span class="msr-l">语音接通率</span><span class="msr-r" style="color:var(--a3)">99.2%</span></div>
+      <div class="msr"><span class="msr-l">数据接入成功率</span><span class="msr-r" style="color:var(--a3)">98.9%</span></div>
+      <div class="msr"><span class="msr-l">掉话率</span><span class="msr-r" style="color:var(--a3)">0.08%</span></div>
+      <div class="msr"><span class="msr-l">5G时延</span><span class="msr-r" style="color:var(--a3)">4.2ms</span></div>
+      <div class="msr"><span class="msr-l">工单解决率</span><span class="msr-r" style="color:var(--a4)">94.6%</span></div>
+      <div class="msr"><span class="msr-l">首次解决率</span><span class="msr-r" style="color:var(--wn)">78.3%</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">近期异常事件</span><span class="ca">全部记录</span></div>
+    <table class="tbl"><thead><tr><th>时间</th><th>类型</th><th>区域</th><th>影响用户</th><th>时长</th><th>状态</th><th>处置团队</th></tr></thead>
+    <tbody>
+      <tr><td>03-29 14:22</td><td>核心网故障</td><td>九龙东</td><td>2,340</td><td>18min</td><td><span class="tag tg">已恢复</span></td><td>网络运营</td></tr>
+      <tr><td>03-28 09:15</td><td>基站断电</td><td>沙田</td><td>856</td><td>42min</td><td><span class="tag tg">已恢复</span></td><td>工程维护</td></tr>
+      <tr><td>03-27 22:08</td><td>DDoS攻击</td><td>全网</td><td>0</td><td>6min</td><td><span class="tag tg">已防御</span></td><td>安全运营</td></tr>
+      <tr><td>03-26 11:30</td><td>传输链路降级</td><td>元朗</td><td>4,120</td><td>1h23m</td><td><span class="tag tg">已恢复</span></td><td>传输维护</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- P3 市场洞察 -->
+<div class="page" id="p3">
+  <div class="g3">
+    <div class="card cs2"><div class="ch"><span class="ct">香港电信市场份额（2026Q1）</span></div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div class="cw h200" style="flex:1"><canvas id="c-mkt"></canvas></div>
+        <div style="flex:1">
+          <div class="msr"><span class="msr-l">CMHK</span><span class="msr-r" style="color:var(--a2)">28.4%</span></div>
+          <div class="msr"><span class="msr-l">CSL/1O1O</span><span class="msr-r">24.1%</span></div>
+          <div class="msr"><span class="msr-l">SmarTone</span><span class="msr-r">21.8%</span></div>
+          <div class="msr"><span class="msr-l">3HK</span><span class="msr-r">19.3%</span></div>
+          <div class="msr"><span class="msr-l">其他</span><span class="msr-r">6.4%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">竞对动态</span><span class="ca" style="color:var(--dn)">3条新预警</span></div>
+      <div class="fi"><div class="fd" style="background:var(--dn)"></div><div><div class="ft">3HK推出无限5G月租$138，低于市场均价18%</div><div class="fm">03-30 · 价格竞争 · 高影响</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--wn)"></div><div><div class="ft">CSL宣布与华为合作部署5G-A网络，预计Q3商用</div><div class="fm">03-29 · 技术升级 · 中影响</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a4)"></div><div><div class="ft">SmarTone获批企业频谱，强化B2B市场布局</div><div class="fm">03-28 · 业务拓展 · 中影响</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a)"></div><div><div class="ft">虚拟运营商份额+2.1%，用户趋向年轻化</div><div class="fm">03-27 · 市场变化 · 低影响</div></div></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="ct">政策与监管动态</span></div>
+      <div class="fi"><div class="fd" style="background:var(--dn)"></div><div><div class="ft">OFCA就5G频谱重组展开公众咨询（截止4月30日）</div><div class="fm">03-30 · OFCA · 高优先级</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--wn)"></div><div><div class="ft">网络安全条例修订草案二读，合规成本预增12%</div><div class="fm">03-28 · 立法会 · 中优先级</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a)"></div><div><div class="ft">香港智慧城市2.0蓝图发布，电信基础设施投资机遇</div><div class="fm">03-25 · 创科局 · 机遇</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a3)"></div><div><div class="ft">粤港澳大湾区数据互通协议签署，跨境业务新机遇</div><div class="fm">03-22 · 政务司 · 战略机遇</div></div></div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">行业宏观趋势</span></div>
+      <div class="fi"><div class="fd" style="background:var(--a3)"></div><div><div class="ft">AI算力需求激增，电信边缘计算市场2026年预计增长35%</div><div class="fm">Gartner报告 · 战略机遇</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a)"></div><div><div class="ft">香港5G专网企业市场渗透率仅12%，潜力巨大</div><div class="fm">行业分析 · 业务机遇</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--a4)"></div><div><div class="ft">固定宽带ARPU持续下行，光纤入户普及率达92%</div><div class="fm">市场研究 · 关注</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--wn)"></div><div><div class="ft">eSIM渗透率快速提升，实体SIM卡收入下滑风险</div><div class="fm">技术趋势 · 应对</div></div></div>
+      <div class="fi"><div class="fd" style="background:var(--pu)"></div><div><div class="ft">Starlink在港申请牌照，补充偏远地区覆盖</div><div class="fm">新进入者 · 关注</div></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="ch"><span class="ct">舆情热词云（近7日）</span><span class="ca">实时更新</span></div>
+    <div class="word-cloud">
+      <span class="wc-word" style="font-size:28px;color:#f43f5e">5G套餐</span>
+      <span class="wc-word" style="font-size:22px;color:#3b82f6">降价</span>
+      <span class="wc-word" style="font-size:20px;color:#f59e0b">频谱</span>
+      <span class="wc-word" style="font-size:18px;color:#22c55e">大湾区</span>
+      <span class="wc-word" style="font-size:26px;color:#fb923c">价格战</span>
+      <span class="wc-word" style="font-size:16px;color:#818cf8">边缘计算</span>
+      <span class="wc-word" style="font-size:14px;color:#7e96b4">eSIM</span>
+      <span class="wc-word" style="font-size:24px;color:#3b82f6">流失率</span>
+      <span class="wc-word" style="font-size:16px;color:#22d3ee">Starlink</span>
+      <span class="wc-word" style="font-size:19px;color:#f43f5e">客服投诉</span>
+      <span class="wc-word" style="font-size:15px;color:#22c55e">AI网络</span>
+      <span class="wc-word" style="font-size:21px;color:#f59e0b">OFCA</span>
+      <span class="wc-word" style="font-size:13px;color:#7e96b4">工单</span>
+      <span class="wc-word" style="font-size:17px;color:#818cf8">5G-A</span>
+      <span class="wc-word" style="font-size:15px;color:#22d3ee">NPS提升</span>
+      <span class="wc-word" style="font-size:23px;color:#3b82f6">企业专线</span>
+      <span class="wc-word" style="font-size:14px;color:#f43f5e">合规</span>
+      <span class="wc-word" style="font-size:18px;color:#22c55e">用户增长</span>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><div class="ch"><span class="ct">竞对关键指标对比（2026Q1）</span></div>
+    <table class="tbl"><thead><tr><th>运营商</th><th>用户数（万）</th><th>ARPU（HKD）</th><th>5G渗透率</th><th>NPS</th><th>年收入（亿）</th><th>5G均速（Mbps）</th><th>综合评分</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--a2);font-weight:600">CMHK</td><td>312.4</td><td>198</td><td>71.3%</td><td>62</td><td>221.8</td><td>387</td><td><span class="tag tg">8.4/10</span></td></tr>
+      <tr><td>CSL/1O1O</td><td>268.2</td><td>218</td><td>68.9%</td><td>58</td><td>195.6</td><td>412</td><td><span class="tag tb2">8.1/10</span></td></tr>
+      <tr><td>SmarTone</td><td>242.8</td><td>204</td><td>65.2%</td><td>55</td><td>176.3</td><td>356</td><td><span class="tag tb2">7.8/10</span></td></tr>
+      <tr><td>3HK</td><td>214.6</td><td>162</td><td>61.4%</td><td>48</td><td>148.2</td><td>298</td><td><span class="tag ta">7.2/10</span></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- P4 风险研判 -->
+<div class="page" id="p4">
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="ct">风险矩阵（概率 × 影响）</span></div>
+      <div class="rm-grid" id="rm-grid"></div>
+      <div class="rm-xlabels"><div class="rm-xl">极低</div><div class="rm-xl">低</div><div class="rm-xl">中</div><div class="rm-xl">高</div><div class="rm-xl">极高</div></div>
+      <div style="margin-top:10px;display:flex;gap:14px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(34,197,94,.2)"></div>低风险</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(245,158,11,.25)"></div>中风险</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(244,63,94,.3)"></div>高风险</div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">风险预警列表</span><span class="ca" style="color:var(--dn)">2项核心风险</span></div>
+      <div class="alt alt-d">风险1：内部跨系统数据存在延迟与缺失，日级监测稳定性不足</div>
+      <div class="alt alt-d">风险2：模型准确率在部分场景未达85%，影响策略可信度</div>
+      <div class="alt alt-w">运营商披露口径不一致，外部横向对比偏差扩大</div>
+      <div class="alt alt-w">三大主业拆分仍有口径冲突，财务归因效率受限</div>
+      <div class="alt alt-i">可通过战略部与业务研究补齐财报缺失字段</div>
+      <div class="alt alt-s">MVP阶段先聚焦高价值指标，逐季迭代可降低落地风险</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ch"><span class="ct">风险量化评估</span></div>
+      <table class="tbl"><thead><tr><th>风险项</th><th>概率</th><th>影响</th><th>风险值</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>数据质量不足/延迟</td><td>68%</td><td>高</td><td><span class="tag tr2">9.0</span></td><td>行动中</td></tr>
+        <tr><td>模型准确率偏低</td><td>55%</td><td>高</td><td><span class="tag tr2">8.4</span></td><td>校准中</td></tr>
+        <tr><td>外部口径不一致</td><td>73%</td><td>中</td><td><span class="tag ta">7.4</span></td><td>应对中</td></tr>
+        <tr><td>跨系统口径冲突</td><td>61%</td><td>中</td><td><span class="tag ta">7.1</span></td><td>治理中</td></tr>
+        <tr><td>财报缺失字段</td><td>49%</td><td>中</td><td><span class="tag ta">6.3</span></td><td>补数中</td></tr>
+        <tr><td>业务协同不足</td><td>37%</td><td>中</td><td><span class="tag tb2">4.3</span></td><td>关注</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">近30天风险趋势</span></div><div class="cw h200"><canvas id="c-risk"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">风险应对进展</span></div>
+      <div class="br"><span class="bl">数据质量治理</span><div class="bt"><div class="bf" style="width:68%;background:var(--a3)"></div></div><span class="bv">68%</span></div>
+      <div class="br"><span class="bl">模型回测校准</span><div class="bt"><div class="bf" style="width:57%;background:var(--a4)"></div></div><span class="bv">57%</span></div>
+      <div class="br"><span class="bl">口径统一机制</span><div class="bt"><div class="bf" style="width:61%;background:var(--a)"></div></div><span class="bv">61%</span></div>
+      <div class="br"><span class="bl">外部采集稳态</span><div class="bt"><div class="bf" style="width:52%;background:var(--a3)"></div></div><span class="bv">52%</span></div>
+      <div class="br"><span class="bl">部门协同机制</span><div class="bt"><div class="bf" style="width:47%;background:var(--wn)"></div></div><span class="bv">47%</span></div>
+      <div class="divider"></div>
+      <div class="msr"><span class="msr-l">整体风险评级</span><span class="msr-r" style="color:var(--wn)">中高</span></div>
+      <div class="msr"><span class="msr-l">较上月</span><span class="msr-r" style="color:var(--a3)">↓ 回落</span></div>
+      <div class="msr"><span class="msr-l">行动项完成率</span><span class="msr-r">62%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- P5 场景模拟 -->
+<div class="page" id="p5">
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="ct">参数设置（数字孪生沙盘）</span><span class="ca" onclick="resetScenario()">重置默认</span></div>
+      <div class="sc"><div class="sc-lbl"><span>套餐策略强度（价格指数）</span><span id="v-price">198</span></div><input type="range" min="120" max="280" value="198" id="s-price" oninput="updateScenario()"></div>
+      <div class="sc"><div class="sc-lbl"><span>市场投放投入（百万HKD）</span><span id="v-mkt">85</span></div><input type="range" min="20" max="200" value="85" id="s-mkt" oninput="updateScenario()"></div>
+      <div class="sc"><div class="sc-lbl"><span>数据治理投入（亿HKD）</span><span id="v-capex">28</span></div><input type="range" min="10" max="50" value="28" id="s-capex" oninput="updateScenario()"></div>
+      <div class="sc"><div class="sc-lbl"><span>政企拓展目标（家）</span><span id="v-b2b">1200</span></div><input type="range" min="500" max="3000" value="1200" id="s-b2b" oninput="updateScenario()"></div>
+      <div class="sc"><div class="sc-lbl"><span>5G用户增长目标（%）</span><span id="v-5g">75</span></div><input type="range" min="60" max="95" value="75" id="s-5g" oninput="updateScenario()"></div>
+      <div class="sc"><div class="sc-lbl"><span>政策/竞对冲击应对力度（%）</span><span id="v-churn">50</span></div><input type="range" min="0" max="100" value="50" id="s-churn" oninput="updateScenario()"></div>
+      <div style="margin:14px 0 8px;font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase">预测算法</div>
+      <div class="algo-tabs" id="algo-tabs">
+        <button class="algo-btn act" onclick="setAlgo(this,'mc')">蒙特卡洛</button>
+        <button class="algo-btn" onclick="setAlgo(this,'lr')">线性回归</button>
+        <button class="algo-btn" onclick="setAlgo(this,'es')">指数平滑</button>
+        <button class="algo-btn" onclick="setAlgo(this,'arima')">ARIMA</button>
+        <button class="algo-btn" onclick="setAlgo(this,'bayes')">贝叶斯</button>
+      </div>
+      <div class="algo-desc" id="algo-desc">蒙特卡洛：随机抽样10,000次模拟，给出概率分布置信区间</div>
+      <div class="mc-status" id="mc-status">状态：就绪</div>
+      <div class="mc-bar"><div class="mc-fill" id="mc-fill" style="width:0%"></div></div>
+      <div class="sc-res">
+        <div class="sc-res-title">12个月预测结果</div>
+        <div class="sc-kpis">
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-rev">+4.8%</div><div class="sc-kl">营收增长</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-usr">+8.2万</div><div class="sc-kl">净增用户</div></div>
+          <div class="sc-kpi"><div class="sc-kv" id="sc-arpu">204</div><div class="sc-kl">预测ARPU</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-profit">+2.1pts</div><div class="sc-kl">利润率变化</div></div>
+          <div class="sc-kpi"><div class="sc-kv" id="sc-churn">1.62%</div><div class="sc-kl">风险暴露率</div></div>
+          <div class="sc-kpi"><div class="sc-kv pos" id="sc-nps">+6pts</div><div class="sc-kl">效益得分提升</div></div>
+        </div>
+        <div class="ci-row" id="ci-row"><span class="ci-label">82%置信区间</span><span class="ci-val" id="ci-val">+3.1% ~ +7.4%</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">场景雷达：基线 vs 模拟</span></div>
+      <div class="cw h220"><canvas id="c-scenario"></canvas></div>
+      <div style="margin-top:12px"><div class="ch"><span class="ct">算法对比：12月营收预测（亿HKD）</span><span class="ca" id="algo-rmse">RMSE: —</span></div>
+        <div class="cw h180"><canvas id="c-algo-compare"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ch"><span class="ct">收入预测走势（含置信带）</span></div>
+      <div class="cw h200"><canvas id="c-forecast"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">ROI敏感性分析</span></div>
+      <div class="cw h200"><canvas id="c-roi"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">决策建议</span></div>
+      <div class="alt alt-s">先固化《三大主业口径说明》并形成系统映射，保证拆分一致性</div>
+      <div class="alt alt-i">优先保障“经营效益、发展效率、运营效能”三维核心指标日级可用</div>
+      <div class="alt alt-w">财报缺口字段采用“披露+研究”双轨补齐，提升竞对横向可比性</div>
+      <div class="alt alt-s">按敏捷节奏季度发布核心模块，MVP在6个月内完成内测</div>
+    </div>
+  </div>
+</div>
+
+<!-- P6 行业趋势 -->
+<div class="page" id="p6">
+  <div class="g4">
+    <div class="kpi k-up"><div class="kl">一年落地目标</div><div class="kv">12<span class="ku">个月</span></div><div class="kc up">平台正式上线</div></div>
+    <div class="kpi k-up"><div class="kl">MVP目标</div><div class="kv">6<span class="ku">个月</span></div><div class="kc up">完成测试版</div></div>
+    <div class="kpi k-up"><div class="kl">AI模型目标</div><div class="kv">≥3<span class="ku">个</span></div><div class="kc up">趋势/风险/场景</div></div>
+    <div class="kpi k-up"><div class="kl">准确率目标</div><div class="kv">≥85<span class="ku">%</span></div><div class="kc up">基于历史回测</div></div>
+  </div>
+  <div class="g21">
+    <div class="card"><div class="ch"><span class="ct">季度迭代发布路线（Q1~Q4）</span></div><div class="cw h240"><canvas id="c-global"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">一年交付成果清单</span></div>
+      <div class="msr"><span class="msr-l">数据整合引擎</span><span class="msr-r"><span class="tag tg">交付目标</span></span></div>
+      <div class="msr"><span class="msr-l">AI预测模型（3+）</span><span class="msr-r"><span class="tag tg">交付目标</span></span></div>
+      <div class="msr"><span class="msr-l">交互式沙盘推演</span><span class="msr-r"><span class="tag tg">交付目标</span></span></div>
+      <div class="msr"><span class="msr-l">Web内网部署</span><span class="msr-r"><span class="tag tb2">规划中</span></span></div>
+      <div class="msr"><span class="msr-l">分级权限管理</span><span class="msr-r"><span class="tag tb2">规划中</span></span></div>
+      <div class="msr"><span class="msr-l">API接口文档</span><span class="msr-r"><span class="tag ta">待交付</span></span></div>
+      <div class="msr"><span class="msr-l">用户手册与培训</span><span class="msr-r"><span class="tag ta">待交付</span></span></div>
+      <div class="msr"><span class="msr-l">MVP验收报告</span><span class="msr-r"><span class="tag tb2">6个月节点</span></span></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ch"><span class="ct">核心能力成熟度预测</span></div><div class="cw h200"><canvas id="c-5gfore"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">效率收益预测（人力节省%）</span></div><div class="cw h200"><canvas id="c-digital"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="ct">主要应用场景优先级</span></div>
+      <div class="br"><span class="bl">战略规划</span><div class="bt"><div class="bf" style="width:92%;background:var(--a3)"></div></div><span class="bv">92</span></div>
+      <div class="br"><span class="bl">风险管理</span><div class="bt"><div class="bf" style="width:88%;background:var(--a)"></div></div><span class="bv">88</span></div>
+      <div class="br"><span class="bl">投资决策</span><div class="bt"><div class="bf" style="width:81%;background:var(--a2)"></div></div><span class="bv">81</span></div>
+      <div class="br"><span class="bl">运营优化</span><div class="bt"><div class="bf" style="width:86%;background:var(--a4)"></div></div><span class="bv">86</span></div>
+      <div class="br"><span class="bl">跨部门协同</span><div class="bt"><div class="bf" style="width:74%;background:var(--pu)"></div></div><span class="bv">74</span></div>
+      <div class="br"><span class="bl">经营复盘</span><div class="bt"><div class="bf" style="width:79%;background:var(--wn)"></div></div><span class="bv">79</span></div>
+    </div>
+  </div>
+</div>
+
+  
+<div class="card ai-card" style="margin-bottom:12px">
+  <div class="ch"><span class="ct">AI 经营洞察摘要</span><span class="ca" onclick="refreshAI()">刷新分析</span></div>
+  <div class="ai-body" id="ai-body">
+    <div class="ai-item ai-good"><span class="ai-label">优势</span><span>内部ERP/CRM/B域/O域数据基础较好，三维指标框架已明确，可直接进入MVP开发。</span></div>
+    <div class="ai-item ai-warn"><span class="ai-label">风险</span><span>数据质量与模型准确率是两大核心风险，若不前置治理将直接影响仿真可信度。</span></div>
+    <div class="ai-item ai-info"><span class="ai-label">机遇</span><span>采用季度迭代可在一年内完成“数据融合+预测+沙盘”闭环，并逐步扩展外部可比维度。</span></div>
+    <div class="ai-item ai-action"><span class="ai-label">行动</span><span>优先完成三大主业口径落表、日级监测链路和模型回测体系，确保6个月MVP如期上线。</span></div>
+  </div>
+</div>
+
+<!-- P7 数据接入 -->
+<div class="page" id="p7">
+  <div class="g4">
+    <div class="kpi"><div class="kl">已评估数据源</div><div class="kv">42<span class="ku">个</span></div><div class="kc up">内部+外部联合治理</div></div>
+    <div class="kpi"><div class="kl">今日处理记录</div><div class="kv"><span id="pkt-count">1,284</span><span class="ku">万条</span></div><div class="kc up">日级滚动更新</div></div>
+    <div class="kpi"><div class="kl">日级刷新达成率</div><div class="kv">91.0<span class="ku">%</span></div><div class="kc up">延迟 <span id="latency">1.2</span>s 内</div></div>
+    <div class="kpi"><div class="kl">口径一致性评分</div><div class="kv">86.4<span class="ku">分</span></div><div class="kc up">↑ 2.1 较上月</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="ct">内部数据源</span><span class="ca" style="color:var(--a3)">8/9 在线</span></div>
+      <div class="ds-list">
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">ERP 财务系统（SAP）</div><div class="ds-meta">日级 · 收入/成本/利润明细</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-erp"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">CRM 客户系统</div><div class="ds-meta">15min · 客户行为/NPS/流失标签</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-crm"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">B域经营指标库</div><div class="ds-meta">日级 · 政企合同/项目进度</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-bss"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">O域网络指标库</div><div class="ds-meta">实时 · 时延/可用率/故障告警</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-oss"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">DPI 行为分析</div><div class="ds-meta">实时 · 流量使用变化/用户轨迹</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-dpi"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">口径说明映射库</div><div class="ds-meta">日级 · 三大主业拆分规则</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">工单系统</div><div class="ds-meta">实时 · 故障/投诉/处置时效</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-warn"></div><div class="ds-info"><div class="ds-name">渠道POS系统</div><div class="ds-meta">30min · 门店销售/库存</div></div><div class="ds-stat"><span class="tag ta">延迟</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">HR 人力系统</div><div class="ds-meta">每日 · 人员配置/效率</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">外部数据源</span><span class="ca" style="color:var(--wn)">2项待补齐</span></div>
+      <div class="ds-list">
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">运营商业绩披露</div><div class="ds-meta">公告抓取 · 季度 · 收入/用户/ARPU</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">上市公司财报抽取</div><div class="ds-meta">R爬虫 · 季度 · 结构化字段</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-spider"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">OFCA 监管数据</div><div class="ds-meta">官方API · 每日 · 政策/合规指标</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-err"></div><div class="ds-info"><div class="ds-name">行业数据库（KPI基准）</div><div class="ds-meta">第三方API · 每周 · 口径差异大</div></div><div class="ds-stat"><span class="tag tr2">待校准</span><span class="ds-retry" onclick="retrySource(this)">重连</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">新闻与舆情监控</div><div class="ds-meta">NLP引擎 · 实时 · 政策/竞对动态</div></div><div class="ds-stat"><span class="tag tg">正常</span><div class="ds-spark" id="r-news"></div></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">战略部研究资料库</div><div class="ds-meta">内部沉淀 · 月度 · 财报缺失补充</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">业务条线专项研究</div><div class="ds-meta">内部共建 · 不定期 · 政企细分规模</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+        <div class="ds-item"><div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">宏观金融数据</div><div class="ds-meta">API · 实时 · 利率/汇率/大盘</div></div><div class="ds-stat"><span class="tag tg">正常</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card cs2">
+      <div class="ch"><span class="ct">实时数据流</span><span class="ca" id="stream-rate">加载中...</span></div>
+      <div class="data-stream" id="data-stream"></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">数据接入量趋势</span></div>
+      <div class="cw h200"><canvas id="c-ingest"></canvas></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ch"><span class="ct">数据质量监控</span></div>
+      <div class="br"><span class="bl">完整性</span><div class="bt"><div class="bf" style="width:96%;background:var(--a3)"></div></div><span class="bv">96%</span></div>
+      <div class="br"><span class="bl">及时性（日级）</span><div class="bt"><div class="bf" style="width:91%;background:var(--a3)"></div></div><span class="bv">91%</span></div>
+      <div class="br"><span class="bl">口径一致性</span><div class="bt"><div class="bf" style="width:86%;background:var(--a)"></div></div><span class="bv">86%</span></div>
+      <div class="br"><span class="bl">可追溯性</span><div class="bt"><div class="bf" style="width:88%;background:var(--a)"></div></div><span class="bv">88%</span></div>
+      <div class="br"><span class="bl">缺失修复率</span><div class="bt"><div class="bf" style="width:90%;background:var(--a3)"></div></div><span class="bv">90%</span></div>
+      <div class="divider"></div>
+      <div class="msr"><span class="msr-l">异常记录（今日）</span><span class="msr-r" style="color:var(--wn)">4,108 条</span></div>
+      <div class="msr"><span class="msr-l">自动修复率</span><span class="msr-r" style="color:var(--a3)">88.6%</span></div>
+      <div class="msr"><span class="msr-l">人工复核</span><span class="msr-r">467 条</span></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">数据处理管道</span></div>
+      <div class="pipeline">
+        <div class="pl-step pl-done"><div class="pl-dot"></div><div><div class="pl-name">采集层</div><div class="pl-desc">Kafka · 24源 · 12.4万条/s</div></div></div>
+        <div class="pl-arrow"></div>
+        <div class="pl-step pl-done"><div class="pl-dot"></div><div><div class="pl-name">清洗层</div><div class="pl-desc">Flink · 去重/补全/格式化</div></div></div>
+        <div class="pl-arrow"></div>
+        <div class="pl-step pl-done"><div class="pl-dot"></div><div><div class="pl-name">融合层</div><div class="pl-desc">Spark · 内外部数据关联</div></div></div>
+        <div class="pl-arrow"></div>
+        <div class="pl-step pl-active"><div class="pl-dot pl-pulse"></div><div><div class="pl-name">分析层</div><div class="pl-desc">ClickHouse · OLAP · 实时计算中</div></div></div>
+        <div class="pl-arrow"></div>
+        <div class="pl-step pl-done"><div class="pl-dot"></div><div><div class="pl-name">服务层</div><div class="pl-desc">API Gateway · 决策仿真系统</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">最新采集事件</span></div>
+      <div class="ds-list" id="event-feed"></div>
+    </div>
+  </div>
+</div>
+</div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+const PAGE_TITLES=['决策总览','财务分析','运营监控','市场洞察','风险研判','场景模拟','行业趋势','数据接入'];
+const PAGE_SUBS=['三维经营监测 · 内外部数据融合与日级感知','三大主业收入拆分 · 口径管理 · 财务预测','经营效益/发展效率/运营效能实时监控','竞对披露 · 政策动态 · 外部研究整合','风险雷达 · 概率评估 · 风险闭环治理','数字孪生沙盘 · 多变量推演 · AI Agent模拟','一年落地路线图 · 交付成果 · 场景价值','ERP/CRM/B域/O域接入 · 外部抓取 · 日级刷新'];
+const ROLE_CONFIG = {
+  exec:    {label:'管理层',   tag:'L3', pages:[0,1,2,3,4,5,6,7], mask:false},
+  analyst: {label:'规划分析', tag:'L2', pages:[0,1,2,3,4,5,6,7], mask:false},
+  staff:   {label:'普通员工', tag:'L1', pages:[0,2,5,6],         mask:true}
+};
+const SENSITIVE_SELECTORS = ['#p1 .kv','#p1 .tbl td','#p1 .msr-r','#p3 .tbl td','#p4 .tbl td','#p7 .ds-val'];
+let currentRole = 'exec';
+let activePageIdx = 0;
+
+function isPageAllowed(idx){
+  const conf = ROLE_CONFIG[currentRole] || ROLE_CONFIG.exec;
+  return conf.pages.includes(idx);
+}
+
+function applySensitiveMask(mask){
+  const sels = SENSITIVE_SELECTORS.join(',');
+  document.querySelectorAll(sels).forEach(el => el.classList.add('sens'));
+  document.body.classList.toggle('role-masked', !!mask);
+}
+
+function applyRolePermissions() {
+  const conf = ROLE_CONFIG[currentRole] || ROLE_CONFIG.exec;
+  const roleTag = document.getElementById('role-tag');
+  if(roleTag){
+    roleTag.textContent = conf.tag;
+    roleTag.className = 'role-tag ' + currentRole;
+  }
+  const roleSelect = document.getElementById('role-select');
+  if(roleSelect && roleSelect.value !== currentRole) roleSelect.value = currentRole;
+
+  document.querySelectorAll('#main-nav .ni').forEach(item => {
+    const idx = +item.dataset.page;
+    item.style.display = conf.pages.includes(idx) ? '' : 'none';
+  });
+  applySensitiveMask(conf.mask);
+
+  if(!conf.pages.includes(activePageIdx)) {
+    const fallback = conf.pages[0];
+    const nav = Array.from(document.querySelectorAll('#main-nav .ni')).find(n => +n.dataset.page === fallback);
+    if(nav) goPage(nav, fallback);
+  }
+}
+
+function switchRole(role){
+  if(!ROLE_CONFIG[role]) return;
+  currentRole = role;
+  localStorage.setItem('ai-role', role);
+  applyRolePermissions();
+}
+
+function goPage(el,idx){
+  if(!isPageAllowed(idx)) return;
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));
+  el.classList.add('act');
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('act');p.style.display='';});
+  const target=document.getElementById('p'+idx);
+  void target.offsetWidth;
+  target.classList.add('act');
+  document.getElementById('tb-title').textContent=PAGE_TITLES[idx];
+  document.getElementById('tb-sub').textContent=PAGE_SUBS[idx];
+  activePageIdx = idx;
+}
+function tick(){const ts=new Date().toLocaleTimeString('zh-HK',{hour12:false});document.getElementById('tb-time').textContent=ts;document.getElementById('sf-time').textContent='最后同步 '+ts;}
+setInterval(tick,1000);tick();
+function syncData(){const btn=document.getElementById('sync-btn');btn.textContent='同步中...';btn.classList.add('loading');setTimeout(()=>{btn.textContent='同步数据';btn.classList.remove('loading');tick();},1400);}
+let currentRange='3M';
+function setRange(el,range){document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('act'));el.classList.add('act');currentRange=range;refreshRevChart();}
+function exportCSV(){const rows=[['主业条线','营收(亿HKD)','同比变化','毛利率','净利润(亿)','收入占比','口径状态'],['个人移动','150.6','+4.2%','48.3%','28.6','67.9%','已对齐'],['家庭宽带','32.4','+2.1%','41.7%','6.8','14.6%','已对齐'],['政企服务','24.8','+8.6%','55.2%','7.2','11.2%','待复核'],['国际及漫游','8.6','-3.4%','38.1%','1.2','3.9%','补充口径'],['数字服务','5.4','+22.3%','62.8%','1.8','2.4%','研究映射']];const csv=rows.map(r=>r.join(',')).join('\n');const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='AI经营决策平台_主业拆分_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+Chart.defaults.color='#4e6a8a';Chart.defaults.borderColor='#1a2436';
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif";
+Chart.defaults.font.size=10.5;
+const RDATA={'1M':{labels:['W1','W2','W3','W4'],rev:[18.1,18.3,18.5,18.6],tgt:[18.2,18.4,18.6,18.8]},'3M':{labels:['1月','2月','3月'],rev:[17.9,18.3,18.6],tgt:[18.1,18.4,19.0]},'6M':{labels:['10月','11月','12月','1月','2月','3月'],rev:[17.2,17.5,17.8,17.9,18.3,18.6],tgt:[17.4,17.6,18.0,18.1,18.4,19.0]},'1Y':{labels:['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'],rev:[16.2,16.8,17.1,17.4,17.0,17.8,18.0,18.2,17.9,18.3,18.5,18.6],tgt:[16.5,17.0,17.2,17.5,17.5,17.8,18.2,18.4,18.2,18.5,18.8,19.0]},'YTD':{labels:['1月','2月','3月'],rev:[17.9,18.3,18.6],tgt:[18.1,18.4,19.0]}};
+const charts={};
+const C=(id,cfg)=>{charts[id]=new Chart(id,cfg);return charts[id];};
+const gridColor='rgba(26,36,54,.8)';
+const opt=(extra={})=>(Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}},extra));
+
+charts['c-rev-chart']=C('c-rev-chart',{type:'line',data:{labels:RDATA['3M'].labels,datasets:[{label:'营收',data:RDATA['3M'].rev,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.4,pointRadius:3,pointHoverRadius:5,borderWidth:1.5},{label:'目标',data:RDATA['3M'].tgt,borderColor:'#3d5470',borderDash:[4,3],fill:false,tension:.4,pointRadius:0,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'亿'}}}}});
+
+function refreshRevChart(){const d=RDATA[currentRange];const ch=charts['c-rev-chart'];ch.data.labels=d.labels;ch.data.datasets[0].data=d.rev;ch.data.datasets[1].data=d.tgt;ch.update();}
+
+C('c-biz',{type:'doughnut',data:{labels:['个人移动','家庭宽带','政企服务'],datasets:[{data:[72,16,12],backgroundColor:['#3b82f6','#22d3ee','#22c55e'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
+C('c-usr',{type:'bar',data:{labels:['经营效益','发展效率','运营效能'],datasets:[{data:[76,69,73],backgroundColor:['#3b82f6','#22c55e','#22d3ee'],borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'分'}}}}});
+
+C('c-fin1',{type:'bar',data:{labels:['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],datasets:[{label:'个人移动',data:[37.2,38.6,37.9,39.1,38.8],backgroundColor:'#3b82f6',borderRadius:3,stack:'s'},{label:'家庭宽带',data:[8.0,8.1,8.2,8.2,8.3],backgroundColor:'#22d3ee',borderRadius:3,stack:'s'},{label:'政企服务',data:[5.8,6.0,6.2,6.5,6.8],backgroundColor:'#22c55e',borderRadius:3,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},stacked:true,ticks:{callback:v=>v+'亿'}}}}});
+C('c-cost',{type:'doughnut',data:{labels:['网络运营','人力成本','销售推广','折旧摘销','行政管理','其他'],datasets:[{data:[32,24,16,14,9,5],backgroundColor:['#3b82f6','#22c55e','#f59e0b','#818cf8','#22d3ee','#3d5470'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
+C('c-profit',{type:'line',data:{labels:['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'],datasets:[{label:'净利润',data:[380,392,405,418,400,425,438,442,428,445,452,460],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:1.5},{label:'EBITDA',data:[580,592,608,622,610,630,645,652,638,660,668,675],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:2,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'M'}}}}});
+C('c-net',{type:'line',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'网络可用率(%)',data:[99.93,99.94,99.95,99.96,99.95,99.96],borderColor:'#22c55e',fill:false,tension:.3,pointRadius:3,borderWidth:1.5},{label:'5G速率(x10Mbps)',data:[32.1,33.4,34.2,36.8,38.2,38.7],borderColor:'#3b82f6',fill:false,tension:.3,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor}}}}});
+C('c-grow',{type:'bar',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'净增用户(万)',data:[5.2,6.1,7.8,8.2,6.5,6.8],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'5G净增(万)',data:[4.1,5.2,6.8,7.1,5.8,5.9],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor}}}}});
+C('c-arpu',{type:'line',data:{labels:['10月','11月','12月','1月','2月','3月'],datasets:[{label:'综合ARPU',data:[202,200,199,198,198,198],borderColor:'#f59e0b',fill:false,tension:.3,pointRadius:3,borderWidth:1.5},{label:'5G ARPU',data:[238,235,234,232,231,230],borderColor:'#3b82f6',fill:false,tension:.3,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>'$'+v}}}}});
+C('c-mkt',{type:'doughnut',data:{labels:['CMHK','CSL/1O1O','SmarTone','3HK','其他'],datasets:[{data:[28.4,24.1,21.8,19.3,6.4],backgroundColor:['#3b82f6','#22d3ee','#22c55e','#f59e0b','#818cf8'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+// Risk matrix
+const rmEl=document.getElementById('rm-grid');
+const riskPts={5:{5:'数据质量不足/延迟',4:'模型准确率偏低'},3:{5:'外部口径不一致',3:'跨系统口径冲突'},2:{4:'财报缺失字段',2:'业务协同不足'}};
+for(let r=5;r>=1;r--){for(let c=1;c<=5;c++){const s=r*c;let bg;if(s>=16)bg='rgba(244,63,94,.32)';else if(s>=9)bg='rgba(245,158,11,.25)';else if(s>=4)bg='rgba(34,197,94,.2)';else bg='rgba(34,197,94,.1)';const el=document.createElement('div');el.className='rc';el.style.background=bg;if(riskPts[r]&&riskPts[r][c]){el.innerHTML=`<div style="width:7px;height:7px;border-radius:50%;background:#fff;opacity:.85"></div><div class="rc-tip">${riskPts[r][c]}</div>`;}rmEl.appendChild(el);}}
+C('c-risk',{type:'line',data:{labels:['3-1','3-5','3-10','3-15','3-20','3-25','3-30'],datasets:[{label:'综合风险指数',data:[6.2,6.5,6.8,7.1,7.0,7.3,7.4],borderColor:'#f43f5e',backgroundColor:'rgba(244,63,94,.06)',fill:true,tension:.4,pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:5,max:10,grid:{color:gridColor}}}}});
+// Scenario charts
+let scChart=C('c-scenario',{type:'radar',data:{labels:['营收增长','用户增长','利润率','网络质量','客户满意','市场份额'],datasets:[{label:'基线',data:[55,60,70,80,75,65],borderColor:'#3d5470',backgroundColor:'rgba(61,84,112,.08)',pointRadius:3,borderWidth:1.5},{label:'模拟',data:[65,72,74,82,80,68],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.1)',pointRadius:3,borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{r:{grid:{color:'rgba(26,36,54,.9)'},pointLabels:{font:{size:10},color:'#7e96b4'},ticks:{display:false},suggestedMin:0,suggestedMax:100}}}});
+
+C('c-roi',{type:'bar',data:{labels:['降价策略','增加推广','5G提速','B2B拓展','数字服务','成本优化'],datasets:[{data:[0.8,1.4,1.8,2.6,3.2,1.9],backgroundColor:['#f43f5e','#f59e0b','#22d3ee','#22c55e','#818cf8','#3b82f6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'x'}}}}});
+C('c-global',{type:'line',data:{labels:['Q1','Q2','Q3','Q4'],datasets:[{label:'数据整合引擎',data:[40,62,81,95],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:3,borderWidth:2},{label:'AI预测模型',data:[25,48,72,88],borderColor:'#22c55e',fill:false,tension:.4,pointRadius:3,borderWidth:1.5},{label:'场景模拟能力',data:[18,36,60,82],borderColor:'#3d5470',fill:false,tension:.4,pointRadius:3,borderWidth:1.5,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
+C('c-5gfore',{type:'line',data:{labels:['M1','M3','M6','M9','M12'],datasets:[{label:'平台成熟度',data:[22,44,63,78,90],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.4,pointRadius:3,borderWidth:1.5},{label:'目标轨迹',data:[20,40,60,75,88],borderColor:'#22c55e',fill:false,tension:.4,pointRadius:3,borderWidth:1.5,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
+C('c-digital',{type:'bar',data:{labels:['Q1','Q2','Q3','Q4'],datasets:[{label:'取数自动化节省',data:[18,32,46,58],backgroundColor:'rgba(129,140,248,.7)',borderRadius:4},{label:'报告生产节省',data:[12,26,41,55],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'分析协同节省',data:[8,20,33,47],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:gridColor},ticks:{callback:v=>v+'%'}}}}});
+
+// Multi-algorithm prediction engine
+let currentAlgo = 'mc';
+const ALGO_DESC = {
+  mc:    '蒙特卡洛：随机抽样10,000次模拟，输出概率分布和置信区间',
+  lr:    '线性回归：基于12个月历史数据拟合趋势线，投影未来走势',
+  es:    '指数平滑（Holt-Winters）：加权近期数据，自动识别季节性和趋势',
+  arima: 'ARIMA(1,1,1)：差分自回归移动平均模型，适合非平稳时序列',
+  bayes: '贝叶斯推断：引入先验知识，输出后验分布与不确定性量化'
+};
+
+const HIST_REV = [16.2,16.8,17.1,17.4,17.0,17.8,18.0,18.2,17.9,18.3,18.5,18.6];
+
+function linReg(data) {
+  const n=data.length; let sx=0,sy=0,sxy=0,sx2=0;
+  data.forEach((y,i)=>{sx+=i;sy+=y;sxy+=i*y;sx2+=i*i;});
+  const b=(n*sxy-sx*sy)/(n*sx2-sx*sx), a=(sy-b*sx)/n;
+  const forecast=[]; for(let i=n;i<n+12;i++) forecast.push(+(a+b*i).toFixed(2));
+  const residuals=data.map((y,i)=>y-(a+b*i));
+  const rmse=Math.sqrt(residuals.reduce((s,r)=>s+r*r,0)/n);
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(rmse*1.96).toFixed(2), name:'线性回归', p10:forecast.map(v=>+(v-rmse*1.96).toFixed(2)), p90:forecast.map(v=>+(v+rmse*1.96).toFixed(2))};
+}
+
+function expSmooth(data,alpha=0.4,beta=0.3) {
+  let l=data[0], b=data[1]-data[0]; const fitted=[];
+  data.forEach(y=>{ const lp=l,bp=b; l=alpha*y+(1-alpha)*(lp+bp); b=beta*(l-lp)+(1-beta)*bp; fitted.push(+(l+b).toFixed(2)); });
+  const forecast=[]; for(let h=1;h<=12;h++) forecast.push(+(l+h*b).toFixed(2));
+  const residuals=data.map((y,i)=>y-fitted[i]);
+  const rmse=Math.sqrt(residuals.reduce((s,r)=>s+r*r,0)/data.length);
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(rmse*1.8).toFixed(2), name:'指数平滑', p10:forecast.map(v=>+(v-rmse*1.8).toFixed(2)), p90:forecast.map(v=>+(v+rmse*1.8).toFixed(2))};
+}
+
+function arimaModel(data) {
+  const diff=data.slice(1).map((v,i)=>v-data[i]);
+  let num=0,den=0;
+  for(let i=1;i<diff.length;i++){num+=diff[i]*diff[i-1];den+=diff[i-1]*diff[i-1];}
+  const phi=den>0?Math.min(0.95,num/den):0.5;
+  const theta=0.3; const errors=diff.map(()=>0); errors[0]=diff[0];
+  const fitted_diff=[diff[0]];
+  for(let i=1;i<diff.length;i++){fitted_diff.push(phi*diff[i-1]+theta*errors[i-1]);errors[i]=diff[i]-fitted_diff[i];}
+  const forecast=[]; let last=data[data.length-1],lastd=diff[diff.length-1],laste=errors[errors.length-1];
+  for(let h=1;h<=12;h++){const fd=phi*lastd+theta*laste;last=+(last+fd).toFixed(2);lastd=fd;laste=0;forecast.push(last);}
+  const rmse=Math.sqrt(errors.reduce((s,e)=>s+e*e,0)/errors.length);
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(rmse*2.1).toFixed(2), name:'ARIMA', p10:forecast.map(v=>+(v-rmse*2.1).toFixed(2)), p90:forecast.map(v=>+(v+rmse*2.1).toFixed(2))};
+}
+
+function bayesian(data) {
+  const priorMu=18, priorPrec=4, n=data.length;
+  const mean=data.reduce((s,v)=>s+v,0)/n;
+  const variance=data.reduce((s,v)=>s+(v-mean)**2,0)/n||0.1;
+  const postMu=(priorPrec*priorMu+n*(mean/variance))/(priorPrec+n/variance);
+  const trend=(data[n-1]-data[0])/(n-1);
+  const forecast=[]; for(let h=1;h<=12;h++) forecast.push(+(postMu+h*trend*0.7).toFixed(2));
+  const residuals=data.map(v=>v-postMu);
+  const rmse=Math.sqrt(residuals.reduce((s,r)=>s+r*r,0)/n);
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(rmse*2.5).toFixed(2), name:'贝叶斯', p10:forecast.map(v=>+(v-rmse*2.5).toFixed(2)), p90:forecast.map(v=>+(v+rmse*2.5).toFixed(2))};
+}
+
+function monteCarlo(data, boost=0) {
+  const n=data.length, mean=data.reduce((s,v)=>s+v,0)/n;
+  const std=Math.sqrt(data.reduce((s,v)=>s+(v-mean)**2,0)/n)||0.2;
+  const trend=(data[n-1]-data[0])/(n-1);
+  const N=10000; const finals=[];
+  // build forecast paths for p10/p90
+  const paths=Array.from({length:12},()=>[]);
+  for(let i=0;i<N;i++){
+    let v=data[n-1];
+    for(let h=0;h<12;h++){
+      const u1=Math.max(1e-10,Math.random()),u2=Math.random();
+      const z=Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);
+      v=+(v+trend+boost+z*std*0.25).toFixed(3);
+      paths[h].push(v);
+    }
+    finals.push(paths[11][paths[11].length-1]);
+  }
+  finals.sort((a,b)=>a-b);
+  const p10v=finals[Math.floor(N*0.1)], p90v=finals[Math.floor(N*0.9)], medv=finals[Math.floor(N*0.5)];
+  const forecast=[]; const p10arr=[]; const p90arr=[];
+  paths.forEach(arr=>{
+    arr.sort((a,b)=>a-b);
+    p10arr.push(+arr[Math.floor(N*0.1)].toFixed(2));
+    p90arr.push(+arr[Math.floor(N*0.5)].toFixed(2));
+    p90arr[p90arr.length-1]=+arr[Math.floor(N*0.9)].toFixed(2);
+    forecast.push(+arr[Math.floor(N*0.5)].toFixed(2));
+  });
+  const rmse=std*1.2;
+  return {forecast, rmse:+rmse.toFixed(3), ci:+(p90v-p10v).toFixed(2), p10:p10arr, p90:p90arr.map((v,i)=>paths[i].sort((a,b)=>a-b)[Math.floor(N*0.9)]), name:'蒙特卡洛', p10v, p50v:medv, p90v};
+}
+
+function runAllAlgos(boost=0) {
+  return {
+    lr: linReg(HIST_REV),
+    es: expSmooth(HIST_REV),
+    arima: arimaModel(HIST_REV),
+    bayes: bayesian(HIST_REV),
+    mc: monteCarlo(HIST_REV, boost)
+  };
+}
+
+function setAlgo(el, algo) {
+  currentAlgo = algo;
+  document.querySelectorAll('.algo-btn').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('algo-desc').textContent = ALGO_DESC[algo];
+  updateScenario();
+}
+
+// ===== SCENARIO ENGINE =====
+function updateScenario() {
+  const price=+document.getElementById('s-price').value;
+  const mkt=+document.getElementById('s-mkt').value;
+  const capex=+document.getElementById('s-capex').value;
+  const b2b=+document.getElementById('s-b2b').value;
+  const fg=+document.getElementById('s-5g').value;
+  const churn=+document.getElementById('s-churn').value;
+  document.getElementById('v-price').textContent=price;
+  document.getElementById('v-mkt').textContent=mkt;
+  document.getElementById('v-capex').textContent=capex;
+  document.getElementById('v-b2b').textContent=b2b;
+  document.getElementById('v-5g').textContent=fg;
+  document.getElementById('v-churn').textContent=churn;
+  const pe=(price-198)/198, me=(mkt-85)/85, be=(b2b-1200)/1200;
+  const boost=(-pe*0.15+me*0.08+be*0.06+(fg-75)/75*0.04+churn/100*0.03);
+  const revG=+(3.8+pe*(-8)+me*5+be*4+(fg-75)/75*2+churn/100*1.5).toFixed(2);
+  const usrG=+(6.8+me*4+(fg-75)/75*6-pe*8+churn/100*2).toFixed(1);
+  const arpuP=Math.round(price*0.88+22);
+  const profC=+(-pe*4+(capex<28?(28-capex)*0.08:-(capex-28)*0.06)+be*2.5).toFixed(1);
+  const churnP=+Math.max(0.6,1.84-churn/100*0.9).toFixed(2);
+  const npsP=Math.round(churn/100*10+be*8+me*5);
+  const fill=document.getElementById('mc-fill');
+  const status=document.getElementById('mc-status');
+  if(status) status.textContent='计算中...';
+  if(fill) fill.style.width='0%';
+  let p=0;
+  const anim=setInterval(()=>{
+    p+=Math.random()*15+10;
+    if(p>=100){p=100;clearInterval(anim);}
+    if(fill) fill.style.width=Math.min(100,p)+'%';
+  },30);
+  setTimeout(()=>{
+    clearInterval(anim);
+    if(fill) fill.style.width='100%';
+    setTimeout(()=>{
+      if(fill) fill.style.width='0%';
+      const all=runAllAlgos(boost);
+      const cur=all[currentAlgo];
+      if(status) status.textContent='算法: '+cur.name+' | RMSE: '+cur.rmse+'亿';
+      const rmseEl=document.getElementById('algo-rmse');
+      if(rmseEl) rmseEl.textContent='RMSE: '+cur.rmse+'亿';
+      const setKPI=(id,val,sfx,isPos)=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        el.textContent=(isPos&&val>0?'+':'')+val.toFixed(1)+sfx;
+        el.className='sc-kv '+(isPos?(val>=0?'pos':'neg'):'');
+      };
+      setKPI('sc-rev',revG,'%',true);
+      const uel=document.getElementById('sc-usr');
+      if(uel){uel.textContent=(usrG>=0?'+':'')+usrG+'万';uel.className='sc-kv '+(usrG>=0?'pos':'neg');}
+      const ael=document.getElementById('sc-arpu');
+      if(ael){ael.textContent=arpuP;ael.className='sc-kv';}
+      setKPI('sc-profit',profC,'pts',true);
+      const cel=document.getElementById('sc-churn');
+      if(cel){cel.textContent=churnP+'%';cel.className='sc-kv '+(churnP<1.84?'pos':'neg');}
+      const nel=document.getElementById('sc-nps');
+      if(nel){nel.textContent='+'+(npsP>0?npsP:0)+'pts';nel.className='sc-kv pos';}
+      const lastF=cur.forecast[cur.forecast.length-1];
+      const ciEl=document.getElementById('ci-val');
+      if(ciEl) ciEl.textContent=(lastF-cur.ci).toFixed(1)+'亿 ~ '+(lastF+cur.ci).toFixed(1)+'亿';
+      if(scChart){
+        scChart.data.datasets[1].data=[
+          Math.min(100,55+revG*2.5),Math.min(100,60+usrG*1.5),
+          Math.min(100,70+profC*4),Math.min(100,80+(fg-75)*0.6),
+          Math.min(100,75+npsP),Math.min(100,65+be*25)
+        ];
+        scChart.update();
+      }
+      updateForecastChart(cur);
+      updateAlgoCompare(all);
+    },150);
+  },currentAlgo==='mc'?800:300);
+}
+function resetScenario(){
+  document.getElementById('s-price').value=198;
+  document.getElementById('s-mkt').value=85;
+  document.getElementById('s-capex').value=28;
+  document.getElementById('s-b2b').value=1200;
+  document.getElementById('s-5g').value=75;
+  document.getElementById('s-churn').value=50;
+  updateScenario();
+}
+
+function updateForecastChart(res){
+  const histLabels=['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+  const allLabels=[...histLabels,'4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+  if(charts['c-forecast']) charts['c-forecast'].destroy();
+  charts['c-forecast']=new Chart('c-forecast',{
+    type:'line',
+    data:{
+      labels:allLabels,
+      datasets:[
+        {label:'历史',data:[...HIST_REV,...Array(12).fill(null)],borderColor:'#7e96b4',fill:false,tension:.4,pointRadius:2,borderWidth:1.5,borderDash:[3,2]},
+        {label:res.name+' 预测',data:[...Array(11).fill(null),HIST_REV[11],...res.forecast],borderColor:'#3b82f6',fill:false,tension:.4,pointRadius:3,borderWidth:2},
+        {label:'P90',data:[...Array(12).fill(null),...res.p90],borderColor:'rgba(59,130,246,.2)',backgroundColor:'rgba(59,130,246,.08)',fill:'-1',tension:.4,pointRadius:0,borderWidth:0},
+        {label:'P10',data:[...Array(12).fill(null),...res.p10],borderColor:'rgba(59,130,246,.2)',backgroundColor:'rgba(59,130,246,.08)',fill:false,tension:.4,pointRadius:0,borderWidth:0}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(26,36,54,.8)'},ticks:{callback:v=>v+'亿'}}}}
+  });
+}
+
+function updateAlgoCompare(all){
+  const algos=['lr','es','arima','bayes','mc'];
+  const names=algos.map(k=>all[k].name);
+  const vals=algos.map(k=>all[k].forecast[11]);
+  const cis=algos.map(k=>all[k].ci);
+  const colors=['#3b82f6','#22c55e','#f59e0b','#818cf8','#f43f5e'];
+  if(charts['c-algo-compare']) charts['c-algo-compare'].destroy();
+  charts['c-algo-compare']=new Chart('c-algo-compare',{
+    type:'bar',
+    data:{labels:names,datasets:[
+      {label:'12月预测营收',data:vals,backgroundColor:colors.map(c=>c+'bb'),borderRadius:5},
+      {label:'置信区间(±)',data:cis,backgroundColor:colors.map(c=>c+'44'),borderRadius:5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(26,36,54,.8)'},ticks:{callback:v=>v+'亿'}}}}
+  });
+}
+
+setTimeout(()=>{ if(document.getElementById('s-price')) updateScenario(); }, 80);
+
+// ===== KEYBOARD NAVIGATION =====
+document.addEventListener('keydown', e => {
+  const key = parseInt(e.key);
+  if(key >= 1 && key <= 8 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const navItems = Array.from(document.querySelectorAll('.ni')).filter(n => n.style.display !== 'none');
+    if(navItems[key-1]) navItems[key-1].click();
+  }
+  // Escape closes notif panel
+  if(e.key === 'Escape') {
+    const p = document.getElementById('notif-panel');
+    if(p) p.style.display = 'none';
+  }
+});
+
+// ===== TICKER BAR =====
+const TICKER_DATA = [
+  {label:'CMHK (0762.HK)', val:6.82, chg:+0.04, pct:+0.59, valDec:2, chgDec:2, pctDec:2},
+  {label:'USD/HKD', val:7.7821, chg:-0.0012, pct:-0.02, valDec:4, chgDec:4, pctDec:2},
+  {label:'恒生指数', val:19842, chg:+234, pct:+1.19, valDec:0, chgDec:0, pctDec:2},
+  {label:'10Y HKD Bond', val:3.82, chg:+0.03, pct:+0.79, valDec:2, chgDec:2, pctDec:2},
+  {label:'WTI Crude', val:81.4, chg:-0.6, pct:-0.73, valDec:1, chgDec:1, pctDec:2},
+  {label:'CSL (上市母公司)', val:18.24, chg:-0.18, pct:-0.98, valDec:2, chgDec:2, pctDec:2},
+  {label:'通胀CPI(HK)', val:2.4, chg:+0.1, pct:null, valDec:1, chgDec:1, pctDec:2},
+  {label:'Prime Rate', val:5.875, chg:0, pct:0, valDec:3, chgDec:3, pctDec:2},
+];
+const TICKER_REPEAT_PER_HALF = 3;
+const TICKER_PX_PER_SEC = 8; // slower continuous marquee
+let tickerResizeTimer = 0;
+function tickerColor(t){
+  return t.chg > 0 ? 'var(--a3)' : t.chg < 0 ? 'var(--dn)' : 'var(--t3)';
+}
+function fixedNum(v, dec){
+  return Number(v).toFixed(dec);
+}
+function signedNum(v, dec){
+  const n = Number(v);
+  const abs = Math.abs(n).toFixed(dec);
+  return `${n < 0 ? '-' : '+'}${abs}`;
+}
+function tickerText(t){
+  const valStr = fixedNum(t.val, t.valDec ?? 2);
+  const chgStr = signedNum(t.chg, t.chgDec ?? 2);
+  const pctStr = t.pct !== null ? ` (${signedNum(t.pct, t.pctDec ?? 2)}%)` : '';
+  return `${valStr} ${chgStr}${pctStr}`;
+}
+function tickerGroupHTML(copyId){
+  const body = TICKER_DATA.map((t, i) =>
+    `<span class="tick-item" data-idx="${i}" data-copy="${copyId}"><span class="tick-label">${t.label}</span><span class="tick-val">${tickerText(t)}</span></span>`
+  ).join('<span class="tick-sep">|</span>');
+  return `${body}<span class="tick-sep">|</span>`;
+}
+function syncTickerDuration(){
+  const track = document.getElementById('tick-track');
+  const half = track ? track.querySelector('.tick-half') : null;
+  if(!track || !half) return;
+  const cycleWidth = half.offsetWidth || 1;
+  const duration = Math.max(36, cycleWidth / TICKER_PX_PER_SEC);
+  track.style.setProperty('--ticker-duration', `${duration.toFixed(2)}s`);
+}
+function buildTicker() {
+  const bar = document.getElementById('ticker-bar');
+  if(!bar) return;
+  const groups = Array.from({length:TICKER_REPEAT_PER_HALF}, (_, i) =>
+    `<div class="tick-group">${tickerGroupHTML(i)}</div>`
+  ).join('');
+  bar.innerHTML = `<div class="tick-track" id="tick-track"><div class="tick-half">${groups}</div><div class="tick-half">${groups}</div></div>`;
+  updateTickerValues(true);
+  syncTickerDuration();
+}
+function updateTickerValues(initial=false) {
+  document.querySelectorAll('#ticker-bar .tick-item').forEach(item => {
+    const idx = +item.dataset.idx;
+    const t = TICKER_DATA[idx];
+    const valEl = item.querySelector('.tick-val');
+    if(!valEl || !t) return;
+    valEl.textContent = tickerText(t);
+    valEl.style.color = tickerColor(t);
+  });
+}
+buildTicker();
+window.addEventListener('resize', () => {
+  clearTimeout(tickerResizeTimer);
+  tickerResizeTimer = setTimeout(syncTickerDuration, 120);
+});
+// Update values only; keep track animation running without reset
+setInterval(() => {
+  TICKER_DATA.forEach(t => {
+    const valStep = Math.pow(10, -(t.valDec ?? 2));
+    const chgStep = Math.pow(10, -(t.chgDec ?? 2));
+    const valDelta = (Math.random() - 0.5) * 4 * valStep;
+    const chgDelta = (Math.random() - 0.5) * 2 * chgStep;
+    t.val = +(Number(t.val) + valDelta).toFixed(t.valDec ?? 2);
+    t.chg = +(Number(t.chg) + chgDelta).toFixed(t.chgDec ?? 2);
+    if(t.pct !== null){
+      const pctStep = Math.pow(10, -(t.pctDec ?? 2));
+      const pctDelta = (Math.random() - 0.5) * 2 * pctStep;
+      t.pct = +(Number(t.pct) + pctDelta).toFixed(t.pctDec ?? 2);
+    }
+  });
+  updateTickerValues();
+}, 5000);
+
+// ===== GAUGE CHART (P0 health score) =====
+function drawGauge(canvasId, value, max, color) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H*0.72;
+  const r = Math.min(W,H)*0.38;
+  ctx.clearRect(0,0,W,H);
+  // Background arc
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, Math.PI, 2*Math.PI);
+  ctx.strokeStyle = 'rgba(255,255,255,.08)';
+  ctx.lineWidth = 14;
+  ctx.stroke();
+  // Value arc
+  const pct = Math.min(value/max, 1);
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, Math.PI, Math.PI + pct*Math.PI);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 14;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+  // Value text
+  ctx.fillStyle = color;
+  ctx.font = `bold ${Math.round(r*0.45)}px -apple-system`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(value, cx, cy - r*0.1);
+  // Label
+  ctx.fillStyle = 'rgba(180,200,220,.6)';
+  ctx.font = `${Math.round(r*0.2)}px -apple-system`;
+  ctx.fillText('/ '+max, cx, cy + r*0.25);
+}
+setTimeout(() => {
+  drawGauge('gauge-health', 78, 100, '#3b82f6');
+  drawGauge('gauge-risk',   74, 100, '#f59e0b');
+  drawGauge('gauge-nps',    62, 100, '#22c55e');
+}, 300);
+
+// ===== EXPORT REPORT =====
+function downloadText(name, content) {
+  const blob = new Blob(['\uFEFF'+content], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+function exportReport() {
+  const now = new Date().toLocaleString('zh-HK');
+  const report = `AI经营决策仿真平台 - 项目经营报告
+生成时间: ${now}
+${'='.repeat(50)}
+
+【项目目标】
+· 一年内落地AI驱动经营决策仿真平台
+· 6个月交付MVP测试版，12个月正式上线
+· 打通内外部数据，建立日级动态监测能力
+· 建成趋势预测、风险评估、场景模拟三类模型（准确率目标85%+）
+
+【数据整合进展】
+· 已评估数据源: 42个（内外部）
+· 内部核心系统: ERP/CRM/B域/O域/DPI/口径映射库
+· 外部来源: 业绩披露/财报抽取/政策API/战略与业务研究资料
+· 当前日级刷新达成率: 91.0%
+
+【风险评估】
+· 风险1: 数据质量不足或延迟（高）
+· 风险2: 模型准确性低于阈值（高）
+· 风险应对: 建立质量治理规则 + 模型回测校准机制
+
+【预期产出】
+· 数据整合引擎（内外部实时接入）
+· AI预测模型（趋势/风险/场景）
+· 交互式Web仪表盘与沙盘推演
+· API接口文档、用户手册、培训材料
+
+【下一步行动】
+1. 完成三大主业拆分口径落表与校验
+2. 建立日级数据SLA与异常闭环机制
+3. 优先上线风险雷达与场景模拟MVP
+4. 按季度进行敏捷迭代并扩展应用场景
+
+--- 由 AI经营决策仿真平台 自动生成 ---`;
+  downloadText('AI经营决策仿真平台_项目报告_'+new Date().toISOString().slice(0,10)+'.txt', report);
+}
+
+function exportAPIDoc() {
+  const doc = `AI经营决策仿真平台 - API接口文档（MVP）
+版本: v0.1
+
+1. 鉴权与权限
+- 角色: exec(管理层), analyst(规划分析), staff(普通员工)
+- 分级访问:
+  exec/analyst: 全模块
+  staff: 决策总览、运营监控、场景模拟、行业趋势
+
+2. 核心接口
+- GET /api/health
+  返回服务状态
+- GET /api/config
+  返回模型与刷新策略
+- GET /api/dashboard/overview
+  返回三维经营指标
+- GET /api/finance/split
+  返回三大主业拆分明细
+- GET /api/risk/radar
+  返回风险雷达与概率评分
+- POST /api/scenario/simulate
+  入参: price/mkt/capex/b2b/fg/churn
+  返回: revG/usrG/profit/churnP/npsP
+
+3. 错误码
+- 401 未认证
+- 403 无权限
+- 422 参数错误
+- 500 服务异常
+
+4. 集成说明
+- Web端通过内网网关接入
+- 建议启用请求审计与字段级脱敏策略
+`;
+  downloadText('AI经营决策仿真平台_API文档_'+new Date().toISOString().slice(0,10)+'.md', doc);
+}
+
+function exportUserManual() {
+  const manual = `AI经营决策仿真平台 - 用户手册（简版）
+
+一、登录与角色
+- 管理层: 查看全部模块与敏感指标
+- 规划分析: 查看全部模块用于分析与测算
+- 普通员工: 查看授权模块，敏感信息自动脱敏
+
+二、模块使用
+1) 决策总览: 查看经营效益、发展效率、运营效能三维指数
+2) 财务分析: 查看三大主业拆分、口径状态与趋势
+3) 风险研判: 查看风险雷达、概率评分与应对进展
+4) 场景模拟: 调整变量后生成未来12个月预测
+5) 数据接入: 查看内外部数据源状态与日级刷新情况
+
+三、导出能力
+- CSV: 三大主业拆分数据
+- 报告: 项目经营报告
+- API文档/用户手册/培训材料: 一键导出
+
+四、注意事项
+- 若发现口径冲突，请优先核对《三大主业口径说明》
+- 若模型准确率低于85%，请触发模型回测与重训流程
+`;
+  downloadText('AI经营决策仿真平台_用户手册_'+new Date().toISOString().slice(0,10)+'.md', manual);
+}
+
+function exportTrainingPack() {
+  const pack = `AI经营决策仿真平台 - 培训材料（简版）
+
+培训目标
+- 让业务与管理用户在30分钟内完成基础上手
+- 让分析用户掌握场景模拟与风险解读方法
+
+课程安排
+1. 平台总体目标与价值（10分钟）
+2. 三维指标体系与口径管理（15分钟）
+3. 场景模拟实操（20分钟）
+4. 风险雷达与预警响应（15分钟）
+5. 权限与数据合规（10分钟）
+
+考核建议
+- 管理层: 能独立完成策略推演与结果解读
+- 分析用户: 能完成参数调优并输出结论
+- 普通员工: 能按权限访问并解读岗位相关指标
+
+产出模板
+- 会议用经营复盘报告
+- 风险预警周报
+- 投资测算简报
+`;
+  downloadText('AI经营决策仿真平台_培训材料_'+new Date().toISOString().slice(0,10)+'.md', pack);
+}
+
+// ===== P7 DATA INGESTION ENGINE =====
+const DS_SOURCES = [
+  {id:'r-bss',  name:'BSS',     cls:'row-fin', types:['套餐变更','账单生成','用户开户','流量超限'],   color:'#22c55e'},
+  {id:'r-oss',  name:'OSS',     cls:'row-net', types:['5G告警','基站离线','流量峰值','时延超标'],   color:'#3b82f6'},
+  {id:'r-crm',  name:'CRM',     cls:'row-mkt', types:['投诉工单','NPS反馈','客户流失风险','商机'],   color:'#fb923c'},
+  {id:'r-erp',  name:'ERP',     cls:'row-fin', types:['收入确认','成本录入','EBITDA更新','Capex'], color:'#22c55e'},
+  {id:'r-dpi',  name:'DPI',     cls:'row-net', types:['流量分类','应用识别','用户画像','异常流量'], color:'#3b82f6'},
+  {id:'r-spider',name:'竞对',   cls:'row-mkt', types:['套餐更新','价格变动','新产品','促销活动'],   color:'#f59e0b'},
+  {id:'r-news', name:'舆情',    cls:'row-risk', types:['负面报道','监管动态','行业新闻','社媒热点'], color:'#f43f5e'},
+];
+
+// Spark line data per source
+const sparkData = {};
+DS_SOURCES.forEach(s => { sparkData[s.id] = Array.from({length:8}, ()=>Math.random()*8+2); });
+
+function renderSpark(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const data = sparkData[id];
+  const max = Math.max(...data);
+  el.innerHTML = data.map(v =>
+    `<div class="ds-spark-bar" style="height:${Math.round(v/max*16)}px"></div>`
+  ).join('');
+}
+
+function updateSparks() {
+  DS_SOURCES.forEach(s => {
+    sparkData[s.id].shift();
+    sparkData[s.id].push(Math.random()*10+1);
+    renderSpark(s.id);
+  });
+}
+
+// Initialize sparks
+DS_SOURCES.forEach(s => renderSpark(s.id));
+
+// Data stream rows
+let pktTotal = 12840000;
+const streamEl = document.getElementById('data-stream');
+const eventEl = document.getElementById('event-feed');
+
+function addStreamRow() {
+  if(!streamEl) return;
+  const src = DS_SOURCES[Math.floor(Math.random()*DS_SOURCES.length)];
+  const type = src.types[Math.floor(Math.random()*src.types.length)];
+  const now = new Date();
+  const ts = now.toTimeString().slice(0,8);
+  const vals = {
+    'BSS': ()=>`用户ID:${Math.floor(Math.random()*9e6+1e6)} ARPU:$${(180+Math.random()*80).toFixed(0)}`,
+    'OSS': ()=>`站点:${['HKI','KLN','NT','LT'][Math.floor(Math.random()*4)]}-${Math.floor(Math.random()*999)} 可用率:${(99.8+Math.random()*.2).toFixed(2)}%`,
+    'CRM': ()=>`客户:${Math.floor(Math.random()*9e5+1e5)} 评分:${(60+Math.random()*40).toFixed(0)}`,
+    'ERP': ()=>`科目:${['移动','固网','企业'][Math.floor(Math.random()*3)]} 金额:${(Math.random()*500+100).toFixed(1)}万`,
+    'DPI': ()=>`协议:${['HTTP','5G-SA','VoLTE','IoT'][Math.floor(Math.random()*4)]} 流量:${(Math.random()*100).toFixed(1)}MB`,
+    '竞对': ()=>`运营商:${['CSL','3HK','SmarTone'][Math.floor(Math.random()*3)]} 套餐:$${(120+Math.random()*150).toFixed(0)}`,
+    '舆情': ()=>`来源:${['HKEJ','明报','微博','Twitter'][Math.floor(Math.random()*4)]} 情感:${Math.random()>.3?'中性':'负面'}`,
+  };
+  const valFn = vals[src.name] || (()=>'数据包已接收');
+  const div = document.createElement('div');
+  div.className = `ds-row ${src.cls}`;
+  div.innerHTML = `<span class="ds-ts">${ts}</span><span class="ds-src">${src.name}</span><span class="ds-type"><span class="tag tb2">${type}</span></span><span class="ds-val">${valFn()}</span>`;
+  streamEl.insertBefore(div, streamEl.firstChild);
+  if(streamEl.children.length > 60) streamEl.removeChild(streamEl.lastChild);
+  // update packet count
+  pktTotal += Math.floor(Math.random()*500+100);
+  const el = document.getElementById('pkt-count');
+  if(el) el.textContent = (pktTotal/1e4).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  // update rate
+  const rateEl = document.getElementById('stream-rate');
+  if(rateEl) rateEl.textContent = `${(Math.random()*3+10).toFixed(1)}万条/s`;
+  // update latency
+  const latEl = document.getElementById('latency');
+  if(latEl) latEl.textContent = (0.8+Math.random()*0.8).toFixed(1);
+}
+
+function addEventRow() {
+  if(!eventEl) return;
+  const events = [
+    {cls:'row-fin', tag:'口径', msg:`口径库更新: 三大主业映射规则 v${Math.floor(Math.random()*5+3)}.${Math.floor(Math.random()*10)} 发布`},
+    {cls:'row-net', tag:'时效', msg:`日级SLA检测: ${['ERP','CRM','B域','O域'][Math.floor(Math.random()*4)]} 延迟 ${(0.8+Math.random()*1.4).toFixed(1)}h`},
+    {cls:'row-mkt', tag:'竞对', msg:`披露抓取: ${['CSL','3HK','SmarTone'][Math.floor(Math.random()*3)]} 新增财报字段 ${Math.floor(Math.random()*4+1)} 项`},
+    {cls:'row-risk', tag:'模型', msg:`模型回测: 场景模拟准确率 ${(82+Math.random()*8).toFixed(1)}%`},
+    {cls:'row-fin', tag:'协同', msg:`研究补数: 战略/业务联合补齐字段 ${Math.floor(Math.random()*20+8)} 条`},
+  ];
+  const e = events[Math.floor(Math.random()*events.length)];
+  const now = new Date().toTimeString().slice(0,8);
+  const div = document.createElement('div');
+  div.className = 'ds-item';
+  div.innerHTML = `<div class="ds-dot ds-live"></div><div class="ds-info"><div class="ds-name">${e.msg}</div><div class="ds-meta">${now} · ${e.tag}</div></div>`;
+  eventEl.insertBefore(div, eventEl.firstChild);
+  if(eventEl.children.length > 8) eventEl.removeChild(eventEl.lastChild);
+}
+
+// Ingest volume chart
+C('c-ingest',{type:'line',data:{
+  labels:['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','now'],
+  datasets:[
+    {label:'内部数据(万条/min)',data:[82,76,70,68,95,142,168,175,180,165,158,145,152],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:1.5},
+    {label:'外部数据(万条/min)',data:[12,10,9,8,15,28,32,35,38,30,28,22,25],borderColor:'#f59e0b',fill:false,tension:.4,pointRadius:2,borderWidth:1.5}
+  ]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(26,36,54,.8)'},ticks:{callback:v=>v+'万'}}}}});
+
+function retrySource(btn) {
+  btn.textContent = '连接中...';
+  btn.style.color = 'var(--wn)';
+  setTimeout(()=>{
+    btn.textContent = '已恢复';
+    btn.style.color = 'var(--a3)';
+    const dot = btn.closest('.ds-item').querySelector('.ds-dot');
+    if(dot){dot.className='ds-dot ds-live';}
+    const tag = btn.previousElementSibling;
+    if(tag){tag.className='tag tg';tag.textContent='正常';}
+  }, 2000);
+}
+
+// Start live simulation
+setInterval(addStreamRow, 600);
+setInterval(addEventRow, 3500);
+setInterval(updateSparks, 1200);
+// Init with some rows
+for(let i=0;i<12;i++) addStreamRow();
+for(let i=0;i<5;i++) addEventRow();
+
+
+// ===== THEME TOGGLE =====
+function toggleTheme() {
+  const root = document.getElementById('root');
+  const isLight = root.getAttribute('data-theme') === 'light';
+  root.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  document.getElementById('theme-btn').textContent = isLight ? '\u2600' : '\u263d';
+  localStorage.setItem('cmhk-theme', isLight ? 'dark' : 'light');
+  setTimeout(() => { Object.values(charts).forEach(ch => { if(ch && ch.update) ch.update(); }); }, 80);
+}
+(function(){
+  const saved = localStorage.getItem('cmhk-theme');
+  if(saved) {
+    document.getElementById('root').setAttribute('data-theme', saved);
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = saved === 'light' ? '\u263d' : '\u2600';
+  }
+})();
+
+// ===== SEARCH NAV =====
+function searchNav(q) {
+  q = q.toLowerCase().trim();
+  document.querySelectorAll('#main-nav .ni').forEach(item => {
+    item.style.display = (!q || item.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+// ===== NOTIFICATIONS =====
+function toggleNotif() {
+  const p = document.getElementById('notif-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
+function clearNotifs() {
+  document.getElementById('notif-dot').style.display = 'none';
+  document.querySelectorAll('.notif-item').forEach(el => el.style.opacity = '0.45');
+  document.getElementById('notif-panel').style.display = 'none';
+}
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('notif-wrap');
+  if(wrap && !wrap.contains(e.target)) {
+    const p = document.getElementById('notif-panel');
+    if(p) p.style.display = 'none';
+  }
+});
+
+// ===== KPI COUNTER ANIMATION =====
+const KPI_TARGETS = [
+  {id:'v-users', from:305.0, to:312.4, dec:1, sfx:'<span class="ku">万</span>'},
+  {id:'v-rev',   from:17.8,  to:18.6,  dec:1, sfx:'<span class="ku">亿HKD</span>'},
+  {id:'v-arpu',  from:202,   to:198,   dec:0, sfx:'<span class="ku">HKD</span>'},
+  {id:'v-nps',   from:57,    to:62,    dec:0, sfx:'<span class="ku">分</span>'},
+  {id:'v-churnr',from:1.64,  to:1.84,  dec:2, sfx:'<span class="ku">%</span>'},
+  {id:'v-margin',from:21.2,  to:22.3,  dec:1, sfx:'<span class="ku">%</span>'}
+];
+function animateAllKPIs() {
+  KPI_TARGETS.forEach(k => {
+    const el = document.getElementById(k.id);
+    if(!el) return;
+    const start = performance.now();
+    const dur = 900;
+    function step(now) {
+      const p = Math.min((now-start)/dur, 1);
+      const ease = 1 - Math.pow(1-p, 3);
+      const val = k.from + (k.to - k.from) * ease;
+      el.innerHTML = val.toFixed(k.dec) + k.sfx;
+      el.classList.add('kv-flash');
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+setTimeout(animateAllKPIs, 500);
+
+// ===== AI INSIGHT REFRESH =====
+const AI_SETS = [
+  [
+    {cls:'ai-good',   label:'优势', text:'内部经营数据基础扎实，ERP/CRM/B域/O域可支持“经营效益、发展效率、运营效能”三维监测。'},
+    {cls:'ai-warn',   label:'风险', text:'高优先级风险是数据时效与质量波动，若日级链路不稳会影响风险雷达有效性。'},
+    {cls:'ai-info',   label:'机遇', text:'通过统一口径说明和自动映射，可显著提升三大主业拆分效率与财务对比可信度。'},
+    {cls:'ai-action', label:'行动', text:'①固化口径说明入库 ②设置日级SLA与告警 ③建立缺失字段自动补数规则。'}
+  ],
+  [
+    {cls:'ai-good',   label:'模型', text:'趋势预测、风险评估、场景模拟三类模型已形成可运行闭环，满足MVP能力基线。'},
+    {cls:'ai-warn',   label:'准确率', text:'模型在外部口径变化场景表现波动，需持续回测确保整体准确率不低于85%。'},
+    {cls:'ai-info',   label:'价值', text:'当模型稳定后，可直接服务战略规划、风险管理、投资决策和运营优化四大场景。'},
+    {cls:'ai-action', label:'行动', text:'①建立周度回测看板 ②将偏差高场景纳入重训 ③联动业务专家做人工校验。'}
+  ],
+  [
+    {cls:'ai-good',   label:'落地', text:'采用敏捷迭代可按季度发布核心模块，6个月MVP、12个月正式版的节奏可执行。'},
+    {cls:'ai-warn',   label:'协同', text:'外部数据来源分散且披露不一致，若跨部门协同不足会拉长数据治理周期。'},
+    {cls:'ai-info',   label:'收益', text:'预计可将取数做表和PPT重复劳动减少60%-70%，让团队聚焦洞察与策略。'},
+    {cls:'ai-action', label:'行动', text:'①明确分级权限与数据合规边界 ②同步准备API文档 ③提前编制培训材料。'}
+  ]
+];
+let aiIdx = 0;
+function refreshAI() {
+  aiIdx = (aiIdx + 1) % AI_SETS.length;
+  const body = document.getElementById('ai-body');
+  if(!body) return;
+  body.style.opacity = '0';
+  setTimeout(() => {
+    body.innerHTML = AI_SETS[aiIdx].map(item =>
+      `<div class="ai-item ${item.cls}"><span class="ai-label">${item.label}</span><span>${item.text}</span></div>`
+    ).join('');
+    body.style.opacity = '1';
+    body.style.transition = 'opacity .3s';
+  }, 200);
+}
+
+// ===== ALERT STREAM (P0) =====
+const ALERTS = [
+  {t:'高', c:'#f43f5e', msg:'风险1预警：内部数据延迟上升，日级刷新稳定性下降'},
+  {t:'高', c:'#f43f5e', msg:'风险2预警：场景模型在外部口径变动场景准确率回落'},
+  {t:'中', c:'#fb923c', msg:'竞对披露新增字段缺失，横向可比性下降'},
+  {t:'中', c:'#3b82f6', msg:'三大主业拆分口径待复核，财务归因需人工确认'},
+  {t:'低', c:'#22c55e', msg:'MVP路线按计划推进，当前交付完成度 63%'},
+];
+const alertStream = document.getElementById('alert-stream');
+if(alertStream) {
+  ALERTS.forEach((a, i) => {
+    const d = document.createElement('div');
+    d.className = 'stream-item';
+    d.innerHTML = `<div class="stream-dot" style="background:${a.c}"></div><div><div class="stream-text">${a.msg}</div><div class="stream-time">${i===0?'刚刚':i+'分钟前'} · ${a.t}优先级</div></div>`;
+    alertStream.appendChild(d);
+  });
+}
+// Add new alert every 15s
+const LIVE_ALERTS = [
+  {c:'#f43f5e', msg:'数据质量告警：ERP到口径映射层出现字段缺失，触发补数流程'},
+  {c:'#fb923c', msg:'外部对比告警：某运营商财报未披露分部ARPU，启用研究补数'},
+  {c:'#3b82f6', msg:'模型回测更新：趋势模型周度准确率 86.2%，较上周 +1.4pts'},
+  {c:'#22c55e', msg:'里程碑进展：风险雷达模块进入联调，Q2计划保持不变'},
+  {c:'#f43f5e', msg:'协同告警：跨部门口径确认超时，请尽快完成复核'},
+];
+let liveAlertIdx = 0;
+setInterval(() => {
+  const stream = document.getElementById('alert-stream');
+  if(!stream) return;
+  const a = LIVE_ALERTS[liveAlertIdx % LIVE_ALERTS.length];
+  liveAlertIdx++;
+  const now = new Date().toLocaleTimeString('zh-HK', {hour12:false});
+  const d = document.createElement('div');
+  d.className = 'stream-item';
+  d.innerHTML = `<div class="stream-dot" style="background:${a.c}"></div><div><div class="stream-text">${a.msg}</div><div class="stream-time">${now} · 实时</div></div>`;
+  stream.insertBefore(d, stream.firstChild);
+  if(stream.children.length > 8) stream.removeChild(stream.lastChild);
+  const cnt = document.getElementById('alert-count');
+  if(cnt) cnt.textContent = stream.children.length + ' 条未读';
+}, 15000);
+
+// ===== ROLE INIT =====
+(function initRole(){
+  const saved = localStorage.getItem('ai-role');
+  if(saved && ROLE_CONFIG[saved]) currentRole = saved;
+  applyRolePermissions();
+})();
+
+</script>
+</body>
+</html>
